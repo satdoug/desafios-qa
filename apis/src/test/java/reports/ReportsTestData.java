@@ -5,6 +5,7 @@ import dtos.ReportParametersCompanyDTO;
 import dtos.ReportParametersPersonDTO;
 import dtos.ReportRequestDTO;
 import enums.ReportMatrix;
+import io.qameta.allure.Step;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,7 @@ public class ReportsTestData {
         return SingletonHolder.instance;
     }
 
+    @Step
     public ReportRequestDTO getValidReportData(ReportMatrix reportMatrix) {
         ReportParameters parameters = getValidParameters(reportMatrix);
         ReportRequestDTO report = new ReportRequestDTO();

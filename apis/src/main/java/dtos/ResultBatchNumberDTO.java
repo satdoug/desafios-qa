@@ -1,6 +1,6 @@
 package dtos;
 
-public class ResultValidDTO extends ResultDTO {
+public class ResultBatchNumberDTO extends ResultDTO {
 
     private BatchNumberDTO result;
 
