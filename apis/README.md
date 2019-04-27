@@ -14,15 +14,15 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 ```
 * Log in Jenkins, access job [idwall-api-test](http://localhost:8080/job/idwall_api_test) and click on "Build with parameters"
 
-![Jenkins Main Menu Example](https://github.com/sfrubio/sergio-rubio/raw/master/task-3-rest-api/src/main/resources/jenkins-main-menu.png "Jenkins Main Menu Example")
+![Jenkins Main Menu Example](https://github.com/sfrubio/desafios-qa/raw/master/apis/src/main/resources/jenkins-main-menu.png "Jenkins Main Menu Example")
 * Fulfill the presented fields according to what data is required for test execution.
 * In addition, it is allowed to choose the test group to be executed, on dropdown field "testGroup"
 * To start test execution, click on button "Build"
 
-![Jenkins Build With Parameters Example](https://github.com/sfrubio/sergio-rubio/raw/master/task-3-rest-api/src/main/resources/jenkins-build-with-parameters.png "Jenkins Build With Parameters Example")
+![Jenkins Build With Parameters Example](https://github.com/sfrubio/desafios-qa/raw/master/apis/src/main/resources/jenkins-build-with-parameters.png "Jenkins Build With Parameters Example")
 * After test execution, results will be placed in [Allure Reports](http://localhost:8080/job/idwall_api_test/allure/):
 
-![Jenkins Allure Reports Example](https://github.com/sfrubio/sergio-rubio/raw/master/task-3-rest-api/src/main/resources/jenkins-build-with-parameters.png "Jenkins Allure Reports Example")
+![Jenkins Allure Reports Example](https://github.com/sfrubio/desafios-qa/raw/master/apis/src/main/resources/jenkins-allure-reports.png "Jenkins Allure Reports Example")
 ## Run test cases with Maven
 ### Execute test cases with default parameters
 ```text
