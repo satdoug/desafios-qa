@@ -15,6 +15,7 @@
         <validBirthday>1982-11-12</validBirthday>
         <validName>Test</validName>
         <validNumber>00000000191</validNumber>
+        <validCompanyNumber>00000000000191</validCompanyNumber>
         <token>00000000-0000-0000-0000-000000000000</token>
         <testGroup>all</testGroup>
     </properties>

@@ -7,6 +7,7 @@ public enum ProjectProperties {
     VALID_NAME("validName"),
     VALID_NUMBER("validNumber"),
     VALID_BIRTHDAY("validBirthday"),
+    VALID_COMPANY_NUMBER("validCompanyNumber"),
     BASE_URL("base.url"),
     TOKEN("token");
 

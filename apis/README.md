@@ -30,11 +30,12 @@ $ mvn clean test
 ```
 ### Execute test cases with test parameters
 ```text
-$ mvn clean test -DvalidName="Valid Name" -DvalidNumber="Valid Document Number" -DvalidBirthday=<Valid Date> -Dtoken=<Valid Token>
+$ mvn clean test -DvalidName="Valid Name" -DvalidNumber="Valid Document Number" -DvalidCompanyNumber="Valid Company Number" -DvalidBirthday=<Valid Date> -Dtoken=<Valid Token>
 ```
 Available fields and default values:
 * `-DvalidName=Test`
 * `-DvalidNumber=00000000191`
+* `-DvalidCompanyNumber=00000000000191`
 * `-DvalidBirthday=1982-11-12`
 * `-Dtoken=00000000-0000-0000-0000-000000000000`
 ### Execute test cases for a specific functionality

@@ -1,23 +1,25 @@
 package dtos;
 
+import enums.ReportMatrix;
+
 public class ReportRequestDTO {
 
-    private String matriz;
-    private ReportParametersDTO parametros;
+    private ReportMatrix matriz;
+    private ReportParameters parametros;
 
-    public String getMatriz() {
+    public ReportMatrix getMatriz() {
         return matriz;
     }
 
-    public void setMatriz(String matriz) {
+    public void setMatriz(ReportMatrix matriz) {
         this.matriz = matriz;
     }
 
-    public ReportParametersDTO getParametros() {
+    public ReportParameters getParametros() {
         return parametros;
     }
 
-    public void setParametros(ReportParametersDTO parametros) {
+    public void setParametros(ReportParameters parametros) {
         this.parametros = parametros;
     }
 }

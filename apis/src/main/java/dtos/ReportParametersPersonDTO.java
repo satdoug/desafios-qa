@@ -1,6 +1,6 @@
 package dtos;
 
-public class ReportParametersDTO {
+public class ReportParametersPersonDTO implements ReportParameters {
 
     private String cpf_data_de_nascimento;
     private String cpf_nome;
