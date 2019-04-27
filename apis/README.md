@@ -1,137 +1,73 @@
-Parte do dia-a-dia na IDwall inclui desenvolvermos e aprimoramos *APIs* oferecendo experiências de integração de APIs para nossos clientes.
+# Idwall - API Test Automation Challenge
 
-Como nós nos divertimos trabalhando, às vezes trabalhamos para nos divertir! Sua missão é desenvolver uma automação para uma de nossas principais APIs. 
-
-Do que se trata esta API? https://docs.idwall.co/docs/overview
-
-**Como funciona a integração?**
-
-Para criar um relatório, precisamos utilizar a API de criação de relatórios da idwall - https://docs.idwall.co/docs/what-is-a-report. Vale informar que esta API é uma API assíncrona. 
-
-Após a criação de um relatório, para obter as informações atualizadas do status de processamento do relatório precisamos acessar a API de obtenção de informações de um relatório - https://docs.idwall.co/docs/get-report.
-
-**O que preciso para iniciar?**
-
-Para início do desafio, é necessário solicitar um Token de Autorização. Normalmente, enviamos junto com o teste para seu e-mail.
-
-# Como o desafio está dividido:
-1. Cenários conhecidos
-2. Cenário não conhecido
-
-## Cenários conhecidos
-1. Onde os dados de envio estão vazios e nossa API retorna erros controlados.
-
-Massa de dados a ser utilizada:
-```bash
-POST para a URL: https://api-v2.idwall.co/relatorios de status code de retorno 200 com o codigo (id) do novo relatório gerado:
-{
-    "matriz": "consultaPessoaDefault",
-    "parametros": {
-        "cpf_data_de_nascimento": "",
-        "cpf_nome": "",
-        "cpf_numero": ""
-    }
-}
-
-Retorno do POST com dados não suportados:
-{
-    "error": "Bad Request",
-    "message": "É necessário enviar ao menos um parâmetro para criação do relatório.",
-    "status_code": 400
-}
+## Execute tests through dockerized Jenkins
+* Pre-requisites: [Docker](https://docs.docker.com/install/) installed on host/local machine 
+* Execute the following command in a Terminal 
+```text
+$ docker run -p 8080:8080 -p 50000:50000 sfrubio/sfrubio:desafio-qa-jenkins
 ```
-
-2. Onde os dados de envio estão inconsistentes e nossa API retorna validações controladas alertando as irregularidades. Considerar os dois cenários a seguir:
-
-```bash
-Cenário 1: Regra de data diferente
-
-POST para a URL: https://api-v2.idwall.co/relatorios de status code de retorno 200 com o codigo (id) do novo relatório gerado:
-{
-    "matriz": "consultaPessoaDefault",
-    "parametros": {
-        "cpf_data_de_nascimento": "28/09/1988",
-        "cpf_nome": "Gabriel Oliveira",
-        "cpf_numero": "07614917677"
-    }
-}
-
-Por ser uma API async, precisamos obter o status atual do processamento através de um Get na API com o codigo (id) do relatório gerado no Post anterior:
-{
-    "result": {
-        "numero": "XPTO-12341234141234",
-        "status": "CONCLUIDO",
-        "nome": "consultaPessoaDefault",
-        "mensagem": "Inválido. [ERROR] Não foi possível validar: Data de nascimento informada está divergente da constante na base de dados da Secretaria da Receita Federal do Brasil.",
-        "resultado": "INVALID",
-        ...
-    },
-    "status_code": 200
-}
+* Ensure that the Docker container is pulled and running in your host. In terminal, run the following command:
+```text
+$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                              NAMES
+339dc64edf95        08b0e7913330        "/sbin/tini -- /usr/…"   5 hours ago         Up 5 hours          0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   desafio-qa-jenkins
 ```
-```bash
-Cenário 2: Regra de nome diferente
+* Log in Jenkins, access job [idwall-api-test](http://localhost:8080/job/idwall_api_test) and click on "Build with parameters"
 
-POST para a URL: https://api-v2.idwall.co/relatorios de status code de retorno 200 com o codigo (id) do novo relatório gerado:{
-    "matriz": "consultaPessoaDefault",
-    "parametros": {
-        "cpf_data_de_nascimento": "25/05/1987",
-        "cpf_nome": "Gabriel Oliveira",
-        "cpf_numero": "07614917677"
-    }
-}
+![Jenkins Main Menu Example](https://github.com/sfrubio/sergio-rubio/raw/master/task-3-rest-api/src/main/resources/jenkins-main-menu.png "Jenkins Main Menu Example")
+* Fulfill the presented fields according to what data is required for test execution.
+* In addition, it is allowed to choose the test group to be executed, on dropdown field "testGroup"
+* To start test execution, click on button "Build"
 
-Por ser uma API async, precisamos obter o status atual do processamento através de um Get na API com o codigo (id) do relatório gerado no Post anterior:
-{
-    "result": {
-        "numero": "XPTO-12341234141234",
-        "status": "CONCLUIDO",
-        "nome": "consultaPessoaDefault",
-        "mensagem": "Inválido. [INVALID] Nome diferente do cadastrado na Receita Federal.",
-        "resultado": "INVALID",
-        ...
-    },
-    "status_code": 200
-}
+![Jenkins Build With Parameters Example](https://github.com/sfrubio/sergio-rubio/raw/master/task-3-rest-api/src/main/resources/jenkins-build-with-parameters.png "Jenkins Build With Parameters Example")
+* After test execution, results will be placed in [Allure Reports](http://localhost:8080/job/idwall_api_test/allure/):
+
+![Jenkins Allure Reports Example](https://github.com/sfrubio/sergio-rubio/raw/master/task-3-rest-api/src/main/resources/jenkins-build-with-parameters.png "Jenkins Allure Reports Example")
+## Run test cases with Maven
+### Execute test cases with default parameters
+```text
+$ mvn clean test
 ```
-
-## Cenário não conhecido
-O cenário não conhecido deve ser preparado para o caso onde o relatório possui os dados de input condizentes aos dados reais de uma pessoa. No caso, para não expor os dados verdadeiros de algum usuário, considere montar um cenário onde podemos validar o status como **CONCLUIDO** e o resultado como **VALID**. O sucesso deste cenário será validado com dados de um dos nossos integrates do time :)
-
-```bash
-Cenário 1: Regra de data diferente
-
-POST para a URL: https://api-v2.idwall.co/relatorios de status code de retorno 200 com o codigo (id) do novo relatório gerado:{
-    "matriz": "consultaPessoaDefault",
-    "parametros": {
-        "cpf_data_de_nascimento": "Data verdadeira",
-        "cpf_nome": "Nome verdadeiro",
-        "cpf_numero": "CPF verdadeiro"
-    }
-}
-
-Por ser uma API async, precisamos obter o status atual do processamento através de um Get na API com o codigo (id) do relatório gerado no Post anterior:
-{
-    "result": {
-        "numero": "XPTO-12341234141234",
-        "status": "CONCLUIDO",
-        "nome": "consultaPessoaDefault",
-        "mensagem": "Válido.",
-        "resultado": "VALID",
-        ...
-    },
-    "status_code": 200
-}
+### Execute test cases with test parameters
+```text
+$ mvn clean test -DvalidName="Valid Name" -DvalidNumber="Valid Document Number" -DvalidBirthday=<Valid Date>
 ```
+Available fields and default values:
+* `-DvalidName=Test`
+* `-DvalidNumber=00000000191`
+* `-DvalidBirthday=1982-11-12`
+### Execute test cases for a specific functionality
+```text
+$ mvn clean test -DtestGroup="functionality"
+```
+### Run tests for a specific functionality
+```text
+mvn clean test -DtestGroup="products"
+```
+Functionalities available: _to be defined_
+### Run tests cases with blocker severity
+```text
+mvn clean test -DtestGroup="blocker"
+```
+### Generate Allure reports
+```text
+$ mvn allure:aggregate
+```
+The Allure report should be generated in folder `target/allure-results`, as defined on Surefire configurations
 
-## Como entregar?
-Utilize alguns dos frameworks mais conhecidos de mercado orientado a tests funcionais para APIs. Um exemplo muito utilizado é o [Cucumber](https://cucumber.io) em suas respectivas linguagens Ruby, Python, etc.
-
-- Descreva como executar os testes;
-- Caso tenha conhecimento, utilize Docker para execução dos testes;
-- Adicione observações caso necessário;
-
-### Dicas
- - Utilize a documentação da IDwall API para guiar nos cenários de testes;
- - Os exemplos ilustram situações do dia-a-dia;
- - Qualquer dúvida, independênte de qual seja, nos envie um e-mail;
+## Summary of the provided solution.
+* Docker image based on the [Official Jenkins Docker image](https://github.com/jenkinsci/docker/blob/master/README.md), just modified Dockerfile to build a image with `/var/jenkins_home` not stored in a volume 
+* Tests designed in Java language, using JUnit5 test framework and Apache Maven for build.
+* Additional tools:
+  * [Allure](https://docs.qameta.io/allure/) (for test report)
+  * [Hamcrest](http://hamcrest.org/) (for assertions)
+  * [RestAssured](http://rest-assured.io/) (for HTTP requests)
+  * [Random Beans](https://github.com/benas/random-beans) (for randomized values)
+  * [Awaitility](https://github.com/awaitility/awaitility) (for implementation of polling logic on asynchronous requests)
+* Test classes and methods were tagged, in order to allow the test execution through command line, by defining which `testGroup` will be executed. 
+* Test classes were separated per functionality, and structured in 4 classes:
+  * `<Functionality>Test.class`: Containing the test scenarios;
+  * `<Functionality>TestData.class`: Containing the steps needed to create test data;
+  * `<Functionality>TestSteps.class`: Containing the steps to execute requests, assert status codes and get response payloads;
+  * `<Functionality>TestAssertions.class`: Containing the steps to made assertions according to test scenario.
+* Created specific DTO classes in `/src/main/dtos/`, to help on request/response payload serialization/deserialization, as well as to keep assertions more descriptive.
