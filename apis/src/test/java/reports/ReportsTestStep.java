@@ -1,9 +1,6 @@
 package reports;
 
-import dtos.ReportRequestDTO;
-import dtos.ResultBatchNumberDTO;
-import dtos.ResultReportValidationDTO;
-import dtos.ValidationResultDTO;
+import dtos.*;
 import io.qameta.allure.Step;
 import org.awaitility.Awaitility;
 import utilities.RequestParams;
@@ -49,7 +46,8 @@ public class ReportsTestStep {
                 .until(() -> {
                     validationResult.set(getReportValidation(reportId));
                     ValidationResultDTO result = validationResult.get().getResult();
-                    return result.getStatus().equals("CONCLUIDO");
+                    return result.getStatus().equals("CONCLUIDO")
+                            || result.getResultado() != null;
                 });
         return validationResult.get();
     }
@@ -63,5 +61,18 @@ public class ReportsTestStep {
         .then()
                 .statusCode(HTTP_OK)
                 .extract().as(ResultReportValidationDTO.class);
+    }
+
+    public ResultBatchNumberDTO manualApproval(UUID reportId, ManualApprovalRequestDTO request) {
+        return RequestParams.getInstance().getRequestParams()
+                .pathParam("reportId", reportId)
+                .header(CONTENT_TYPE, "application/json")
+                .body(request)
+        .when()
+                .post("/relatorios/validar/{reportId}")
+                .prettyPeek()
+        .then()
+                .statusCode(HTTP_OK)
+                .extract().as(ResultBatchNumberDTO.class);
     }
 }

@@ -1,5 +1,6 @@
 package reports;
 
+import dtos.ManualApprovalRequestDTO;
 import dtos.ReportRequestDTO;
 import dtos.ResultBatchNumberDTO;
 import dtos.ResultReportValidationDTO;
@@ -39,12 +40,6 @@ public class ReportsTest {
         getAndAssertReportValidation(result);
     }
 
-    private void getAndAssertReportValidation(ResultBatchNumberDTO result) {
-        UUID reportId = result.getResult().getNumero();
-        ResultReportValidationDTO validationResult = reportsTestStep.awaitFinishReportValidation(reportId);
-        reportsTestAssertions.assertReportValidation(validationResult);
-    }
-
     @Test
     @Description("Request a report for matrix consultaCPF")
     @Tag("blocker")
@@ -63,10 +58,39 @@ public class ReportsTest {
         getAndAssertReportValidation(result);
     }
 
+    @Test
+    @Description("Approve a report manually")
+    @Severity(SeverityLevel.CRITICAL)
+    public void approveReportManually() {
+        ResultBatchNumberDTO result = postAndAssertValidReport(consultaPessoaDefault);
+        ResultBatchNumberDTO approvalResult = postAndAssertManualApproval(result);
+        getAndAssertReportValidatedManually(approvalResult);
+    }
+
     private ResultBatchNumberDTO postAndAssertValidReport(ReportMatrix consultaPessoaDefault) {
         ReportRequestDTO validReportData = reportsTestData.getValidReportData(consultaPessoaDefault);
         ResultBatchNumberDTO result = reportsTestStep.createReport(validReportData);
         reportsTestAssertions.assertValidResult(result);
         return result;
+    }
+
+    private ResultBatchNumberDTO postAndAssertManualApproval(ResultBatchNumberDTO result) {
+        UUID reportId = result.getResult().getNumero();
+        ManualApprovalRequestDTO validReportData = reportsTestData.getManualApproval();
+        ResultBatchNumberDTO approvalResult = reportsTestStep.manualApproval(reportId, validReportData);
+        reportsTestAssertions.assertValidResult(approvalResult);
+        return approvalResult;
+    }
+
+    private void getAndAssertReportValidation(ResultBatchNumberDTO result) {
+        UUID reportId = result.getResult().getNumero();
+        ResultReportValidationDTO validationResult = reportsTestStep.awaitFinishReportValidation(reportId);
+        reportsTestAssertions.assertReportValidation(validationResult);
+    }
+
+    private void getAndAssertReportValidatedManually(ResultBatchNumberDTO approvalResult) {
+        UUID reportId = approvalResult.getResult().getNumero();
+        ResultReportValidationDTO validationResult = reportsTestStep.awaitFinishReportValidation(reportId);
+        reportsTestAssertions.assertReportValidatedManually(validationResult);
     }
 }

@@ -2,5 +2,6 @@ package enums;
 
 public enum ValidationResult {
     VALID,
-    INVALID
+    INVALID,
+    MANUAL_APPROVAL
 }

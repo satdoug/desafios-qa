@@ -1,9 +1,6 @@
 package reports;
 
-import dtos.ReportParameters;
-import dtos.ReportParametersCompanyDTO;
-import dtos.ReportParametersPersonDTO;
-import dtos.ReportRequestDTO;
+import dtos.*;
 import enums.ReportMatrix;
 import io.qameta.allure.Step;
 
@@ -29,6 +26,11 @@ public class ReportsTestData {
         report.setMatriz(reportMatrix);
         report.setParametros(parameters);
         return report;
+    }
+
+    @Step
+    public ManualApprovalRequestDTO getManualApproval() {
+        return ManualApprovalRandomizer.getInstance().getRandomValue();
     }
 
     private ReportParameters getValidParameters(ReportMatrix reportMatrix) {

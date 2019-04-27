@@ -10,6 +10,7 @@ import io.qameta.allure.Step;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static enums.ValidationResult.MANUAL_APPROVAL;
 import static enums.ValidationResult.VALID;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,5 +42,12 @@ public class ReportTestAssertions {
                 .map(ValidationRulesDTO::getResultado)
                 .collect(Collectors.toList());
         assertThat(allResults, everyItem(is(VALID)));
+    }
+
+    @Step
+    public void assertReportValidatedManually(ResultReportValidationDTO validationResult) {
+        ValidationResultDTO result = validationResult.getResult();
+        assertThat(result.getResultado(), is(MANUAL_APPROVAL));
+        assertThat(result.getValidado_manualmente(), is(true));
     }
 }
