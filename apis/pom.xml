@@ -12,9 +12,10 @@
         <aspectj.version>1.8.10</aspectj.version>
         <junit.version>5.4.2</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <validBirthday>1982-12-11</validBirthday>
+        <validBirthday>1982-11-12</validBirthday>
         <validName>Test</validName>
         <validNumber>00000000191</validNumber>
+        <token>00000000-0000-0000-0000-000000000000</token>
         <testGroup>all</testGroup>
     </properties>
 

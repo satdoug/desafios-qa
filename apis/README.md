@@ -12,7 +12,7 @@ $ docker ps -a
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                              NAMES
 339dc64edf95        08b0e7913330        "/sbin/tini -- /usr/…"   5 hours ago         Up 5 hours          0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   desafio-qa-jenkins
 ```
-* Log in Jenkins, access job [idwall-api-test](http://localhost:8080/job/idwall_api_test) and click on "Build with parameters"
+* Log in Jenkins with user `idwall` and password `desafio_qa`, access job [idwall-api-test](http://localhost:8080/job/idwall_api_test) and click on "Build with parameters"
 
 ![Jenkins Main Menu Example](https://github.com/sfrubio/desafios-qa/raw/master/apis/src/main/resources/jenkins-main-menu.png "Jenkins Main Menu Example")
 * Fulfill the presented fields according to what data is required for test execution.
@@ -30,21 +30,20 @@ $ mvn clean test
 ```
 ### Execute test cases with test parameters
 ```text
-$ mvn clean test -DvalidName="Valid Name" -DvalidNumber="Valid Document Number" -DvalidBirthday=<Valid Date>
+$ mvn clean test -DvalidName="Valid Name" -DvalidNumber="Valid Document Number" -DvalidBirthday=<Valid Date> -Dtoken=<Valid Token>
 ```
 Available fields and default values:
 * `-DvalidName=Test`
 * `-DvalidNumber=00000000191`
 * `-DvalidBirthday=1982-11-12`
+* `-Dtoken=00000000-0000-0000-0000-000000000000`
 ### Execute test cases for a specific functionality
 ```text
 $ mvn clean test -DtestGroup="functionality"
 ```
-### Run tests for a specific functionality
-```text
-mvn clean test -DtestGroup="products"
-```
-Functionalities available: _to be defined_
+Functionalities available:
+* all
+* reports
 ### Run tests cases with blocker severity
 ```text
 mvn clean test -DtestGroup="blocker"
