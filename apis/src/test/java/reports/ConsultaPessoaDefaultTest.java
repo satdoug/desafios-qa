@@ -13,6 +13,7 @@ import support.ReportsSteps;
 import java.util.UUID;
 
 import static enums.ReportMatrix.consultaPessoaDefault;
+import static enums.ReportQuery.REPORT_BASIC;
 import static enums.ReportQuery.REPORT_DATA;
 import static enums.ReportQuery.REPORT_VALIDATION;
 
@@ -46,16 +47,25 @@ public class ConsultaPessoaDefaultTest {
     @Severity(SeverityLevel.BLOCKER)
     public void requestValidationReportConsultaPessoaDefault() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_VALIDATION, reportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_VALIDATION, reportId);
         reportsAssertions.assertReportValidation(validationResult);
     }
 
     @Test
-    @Description("Request data report for matrix consultaEmpresaDefault")
+    @Description("Request basic report for matrix consultaPessoaDefault")
+    @Severity(SeverityLevel.CRITICAL)
+    public void requestBasicReportConsultaPessoaDefault() {
+        UUID reportId = result.getResult().getNumero();
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_BASIC, reportId);
+        reportsAssertions.assertReportBasic(validationResult);
+    }
+
+    @Test
+    @Description("Request data report for matrix consultaPessoaDefault")
     @Severity(SeverityLevel.CRITICAL)
     public void requestDataReportConsultaPessoaDefault() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_DATA, reportId);
-        reportsAssertions.assertReportData(validationResult);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_DATA, reportId);
+        reportsAssertions.assertReportDataConsultaPessoaDefault(validationResult);
     }
 }

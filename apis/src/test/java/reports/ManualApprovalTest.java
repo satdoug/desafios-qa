@@ -80,7 +80,7 @@ public class ManualApprovalTest {
 
     private void getAndAssertReportValidatedManually(ResultDTO manualReportResult) {
         UUID manualReportId = manualReportResult.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_VALIDATION, manualReportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_VALIDATION, manualReportId);
         reportsAssertions.assertReportValidatedManually(validationResult);
     }
 }

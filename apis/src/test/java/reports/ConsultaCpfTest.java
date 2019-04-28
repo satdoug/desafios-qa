@@ -13,6 +13,7 @@ import support.ReportsSteps;
 import java.util.UUID;
 
 import static enums.ReportMatrix.consultaCPF;
+import static enums.ReportQuery.REPORT_BASIC;
 import static enums.ReportQuery.REPORT_DATA;
 import static enums.ReportQuery.REPORT_VALIDATION;
 
@@ -46,8 +47,17 @@ public class ConsultaCpfTest {
     @Severity(SeverityLevel.BLOCKER)
     public void requestValidationReportConsultaCpf() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_VALIDATION, reportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_VALIDATION, reportId);
         reportsAssertions.assertReportValidation(validationResult);
+    }
+
+    @Test
+    @Description("Request basic report for matrix consultaCPF")
+    @Severity(SeverityLevel.CRITICAL)
+    public void requestBasicReportConsultaCpf() {
+        UUID reportId = result.getResult().getNumero();
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_BASIC, reportId);
+        reportsAssertions.assertReportBasic(validationResult);
     }
 
     @Test
@@ -55,7 +65,7 @@ public class ConsultaCpfTest {
     @Severity(SeverityLevel.CRITICAL)
     public void requestDataReportConsultaCpf() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_DATA, reportId);
-        reportsAssertions.assertReportData(validationResult);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_DATA, reportId);
+        reportsAssertions.assertReportDataConsultaCpf(validationResult);
     }
 }

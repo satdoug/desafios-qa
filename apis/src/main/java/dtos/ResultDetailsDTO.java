@@ -24,6 +24,13 @@ public class ResultDetailsDTO {
     private String criado_em;
     private String criado_por;
     private List<ValidationRulesDTO> validacoes;
+    private Object blacklists;
+    private Object certidoes_negativas;
+    private Object cpf;
+    private Object cnpj;
+    private Object divida_ativa;
+    private Object processos;
+    private Object protestos;
 
     public UUID getNumero() {
         return numero;
@@ -119,5 +126,61 @@ public class ResultDetailsDTO {
 
     public void setValidacoes(List<ValidationRulesDTO> validacoes) {
         this.validacoes = validacoes;
+    }
+
+    public Object getCertidoes_negativas() {
+        return certidoes_negativas;
+    }
+
+    public void setCertidoes_negativas(Object certidoes_negativas) {
+        this.certidoes_negativas = certidoes_negativas;
+    }
+
+    public Object getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(Object cpf) {
+        this.cpf = cpf;
+    }
+
+    public Object getProcessos() {
+        return processos;
+    }
+
+    public void setProcessos(Object processos) {
+        this.processos = processos;
+    }
+
+    public Object getProtestos() {
+        return protestos;
+    }
+
+    public void setProtestos(Object protestos) {
+        this.protestos = protestos;
+    }
+
+    public Object getBlacklists() {
+        return blacklists;
+    }
+
+    public void setBlacklists(Object blacklists) {
+        this.blacklists = blacklists;
+    }
+
+    public Object getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(Object cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public Object getDivida_ativa() {
+        return divida_ativa;
+    }
+
+    public void setDivida_ativa(Object divida_ativa) {
+        this.divida_ativa = divida_ativa;
     }
 }

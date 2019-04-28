@@ -33,7 +33,7 @@ public class ReportsAssertions {
     }
 
     @Step
-    public void assertReportData(ResultDTO result) {
+    public void assertReportBasic(ResultDTO result) {
         ResultDetailsDTO resultDetails = result.getResult();
         assertThat(resultDetails.getResultado(), is(VALID));
         assertThat(resultDetails.getValidado_manualmente(), is(false));
@@ -41,12 +41,43 @@ public class ReportsAssertions {
 
     @Step
     public void assertReportValidation(ResultDTO result) {
-        assertReportData(result);
+        assertReportBasic(result);
         List<ValidationResult> allResults = result.getResult().getValidacoes().stream()
                 .map(ValidationRulesDTO::getResultado)
                 .collect(Collectors.toList());
         assertThat(allResults, everyItem(is(VALID)));
     }
+
+    @Step
+    public void assertReportDataConsultaPessoaDefault(ResultDTO result) {
+        assertReportBasic(result);
+        assertThat(result.getResult(), allOf(
+                hasProperty("certidoes_negativas", not(nullValue())),
+                hasProperty("cpf", not(nullValue())),
+                hasProperty("processos", not(nullValue())),
+                hasProperty("protestos", not(nullValue()))
+        ));
+    }
+
+    @Step
+    public void assertReportDataConsultaCpf(ResultDTO result) {
+        assertReportBasic(result);
+        assertThat(result.getResult(), hasProperty("cpf", not(nullValue())));
+    }
+
+    @Step
+    public void assertReportDataConsultaEmpresaDefault(ResultDTO result) {
+        assertReportBasic(result);
+        assertThat(result.getResult(), allOf(
+                hasProperty("blacklists", not(nullValue())),
+                hasProperty("certidoes_negativas", not(nullValue())),
+                hasProperty("cnpj", not(nullValue())),
+                hasProperty("divida_ativa", not(nullValue())),
+                hasProperty("processos", not(nullValue())),
+                hasProperty("protestos", not(nullValue()))
+        ));
+    }
+
 
     @Step
     public void assertReportValidatedManually(ResultDTO validationResult) {

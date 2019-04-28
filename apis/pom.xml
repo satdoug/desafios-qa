@@ -13,10 +13,10 @@
         <junit.version>5.4.2</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <validBirthday>1982-11-12</validBirthday>
-        <validName>Sergio Francisco Rubio</validName>
-        <validNumber>30253987873</validNumber>
-        <validCompanyNumber>04543267000186</validCompanyNumber>
-        <token>24074832-0feb-40cb-91d4-e1ac9cf56dcd</token>
+        <validName>Test</validName>
+        <validNumber>00000000191</validNumber>
+        <validCompanyNumber>00000000000191</validCompanyNumber>
+        <token>00000000-0000-0000-0000-000000000000</token>
         <testGroup>all</testGroup>
     </properties>
 

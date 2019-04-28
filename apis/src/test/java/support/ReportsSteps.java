@@ -38,19 +38,30 @@ public class ReportsSteps {
     }
 
     @Step
-    public ResultDTO awaitFinishReportValidation(ReportQuery reportQuery, UUID reportId) {
+    public ResultDTO awaitFinishReportQuery(ReportQuery reportQuery, UUID reportId) {
         AtomicReference<ResultDTO> queryResult = new AtomicReference<>();
         Awaitility.pollInSameThread();
         Awaitility.await()
                 .atMost(5, MINUTES)
                 .pollInterval(5, SECONDS)
                 .until(() -> {
-                    queryResult.set(ReportQueryFactory.getInstance().getReportQuery(reportQuery, reportId));
+                    queryResult.set(getReportQuery(reportQuery, reportId));
                     ResultDetailsDTO result = queryResult.get().getResult();
                     return result.getStatus().equals("CONCLUIDO")
                             || result.getResultado() != null;
                 });
         return queryResult.get();
+    }
+
+    private ResultDTO getReportQuery(ReportQuery reportQuery, UUID reportId) {
+        return RequestParams.getInstance().getRequestParams()
+                .pathParam("reportId", reportId)
+        .when()
+                .get(reportQuery.getReportEndpoint())
+                .prettyPeek()
+        .then()
+                .statusCode(HTTP_OK)
+                .extract().as(ResultDTO.class);
     }
 
     public ResultDTO manualApproval(UUID reportId, ManualApprovalRequestDTO request) {
