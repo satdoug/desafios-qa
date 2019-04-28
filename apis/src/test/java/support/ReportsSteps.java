@@ -38,14 +38,14 @@ public class ReportsSteps {
     }
 
     @Step
-    public ResultDTO awaitFinishReportQuery(ReportQuery reportQuery, UUID reportId) {
+    public ResultDTO awaitFinishReportProcessing(ReportQuery reportQuery, UUID reportId) {
         AtomicReference<ResultDTO> queryResult = new AtomicReference<>();
         Awaitility.pollInSameThread();
         Awaitility.await()
                 .atMost(5, MINUTES)
                 .pollInterval(5, SECONDS)
                 .until(() -> {
-                    queryResult.set(getReportQuery(reportQuery, reportId));
+                    queryResult.set(getReportProcessing(reportQuery, reportId));
                     ResultDetailsDTO result = queryResult.get().getResult();
                     return result.getStatus().equals("CONCLUIDO")
                             || result.getResultado() != null;
@@ -53,7 +53,22 @@ public class ReportsSteps {
         return queryResult.get();
     }
 
-    private ResultDTO getReportQuery(ReportQuery reportQuery, UUID reportId) {
+    @Step
+    public ResultDTO awaitFinishReportQuery(UUID reportId) {
+        AtomicReference<ResultDTO> queryResult = new AtomicReference<>();
+        Awaitility.pollInSameThread();
+        Awaitility.await()
+                .atMost(5, MINUTES)
+                .pollInterval(5, SECONDS)
+                .until(() -> {
+                    queryResult.set(getReportProcessing(ReportQuery.REPORT_QUERY, reportId));
+                    ResultDetailsDTO result = queryResult.get().getResult();
+                    return result.getStatus_protocolo().equals("CONCLUIDO");
+                });
+        return queryResult.get();
+    }
+
+    private ResultDTO getReportProcessing(ReportQuery reportQuery, UUID reportId) {
         return RequestParams.getInstance().getRequestParams()
                 .pathParam("reportId", reportId)
         .when()

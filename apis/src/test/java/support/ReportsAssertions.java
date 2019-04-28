@@ -1,8 +1,10 @@
 package support;
 
+import dtos.QueryDetailsDTO;
 import dtos.ResultDTO;
 import dtos.ResultDetailsDTO;
 import dtos.ValidationRulesDTO;
+import enums.ReportMatrix;
 import enums.ValidationResult;
 import io.qameta.allure.Step;
 
@@ -78,6 +80,37 @@ public class ReportsAssertions {
         ));
     }
 
+    @Step
+    public void assertReportQueryConsultaCpf(ResultDTO result) {
+        assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaCPF));
+        assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
+        List<String> queryNames = result.getResult().getConsultas().stream()
+                .map(QueryDetailsDTO::getNome)
+                .collect(Collectors.toList());
+        assertThat(queryNames, hasItem("CPF Receita Federal"));
+    }
+
+    @Step
+    public void assertReportQueryConsultaPessoaDefault(ResultDTO result) {
+        assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaPessoaDefault));
+        assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
+        List<String> queryNames = result.getResult().getConsultas().stream()
+                .map(QueryDetailsDTO::getNome)
+                .collect(Collectors.toList());
+        assertThat(queryNames, hasItems("Processos SP", "CPF Receita Federal", "Antecedentes Federal", "Protestos"));
+    }
+
+    @Step
+    public void assertReportQueryConsultaEmpresaDefault(ResultDTO result) {
+        assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaEmpresaDefault));
+        assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
+        List<String> queryNames = result.getResult().getConsultas().stream()
+                .map(QueryDetailsDTO::getNome)
+                .collect(Collectors.toList());
+        assertThat(queryNames, hasItems("Regularidade FGTS na Caixa", "Processos SP", "CEIS Tranparência",
+                "CNEP Transparência", "Certidão Negativa de Débitos Trabalhistas", "Divida Ativa na Fazenda",
+                "CNPJ Receita Federal", "Protestos"));
+    }
 
     @Step
     public void assertReportValidatedManually(ResultDTO validationResult) {

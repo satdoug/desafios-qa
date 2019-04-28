@@ -47,7 +47,7 @@ public class ConsultaPessoaDefaultTest {
     @Severity(SeverityLevel.BLOCKER)
     public void requestValidationReportConsultaPessoaDefault() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_VALIDATION, reportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_VALIDATION, reportId);
         reportsAssertions.assertReportValidation(validationResult);
     }
 
@@ -56,7 +56,7 @@ public class ConsultaPessoaDefaultTest {
     @Severity(SeverityLevel.CRITICAL)
     public void requestBasicReportConsultaPessoaDefault() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_BASIC, reportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_BASIC, reportId);
         reportsAssertions.assertReportBasic(validationResult);
     }
 
@@ -65,7 +65,16 @@ public class ConsultaPessoaDefaultTest {
     @Severity(SeverityLevel.CRITICAL)
     public void requestDataReportConsultaPessoaDefault() {
         UUID reportId = result.getResult().getNumero();
-        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(REPORT_DATA, reportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_DATA, reportId);
         reportsAssertions.assertReportDataConsultaPessoaDefault(validationResult);
+    }
+
+    @Test
+    @Description("Request query report for matrix consultaPessoaDefault")
+    @Severity(SeverityLevel.CRITICAL)
+    public void requestQueryReportConsultaPessoaDefault() {
+        UUID reportId = result.getResult().getNumero();
+        ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(reportId);
+        reportsAssertions.assertReportQueryConsultaPessoaDefault(validationResult);
     }
 }

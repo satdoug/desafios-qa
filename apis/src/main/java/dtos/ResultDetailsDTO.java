@@ -31,6 +31,9 @@ public class ResultDetailsDTO {
     private Object divida_ativa;
     private Object processos;
     private Object protestos;
+    private ReportMatrix nome_matriz;
+    private String status_protocolo;
+    private List<QueryDetailsDTO> consultas;
 
     public UUID getNumero() {
         return numero;
@@ -182,5 +185,29 @@ public class ResultDetailsDTO {
 
     public void setDivida_ativa(Object divida_ativa) {
         this.divida_ativa = divida_ativa;
+    }
+
+    public ReportMatrix getNome_matriz() {
+        return nome_matriz;
+    }
+
+    public void setNome_matriz(ReportMatrix nome_matriz) {
+        this.nome_matriz = nome_matriz;
+    }
+
+    public String getStatus_protocolo() {
+        return status_protocolo;
+    }
+
+    public void setStatus_protocolo(String status_protocolo) {
+        this.status_protocolo = status_protocolo;
+    }
+
+    public List<QueryDetailsDTO> getConsultas() {
+        return consultas;
+    }
+
+    public void setConsultas(List<QueryDetailsDTO> consultas) {
+        this.consultas = consultas;
     }
 }
