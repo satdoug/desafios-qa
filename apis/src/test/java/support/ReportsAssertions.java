@@ -9,6 +9,8 @@ import enums.ValidationResult;
 import io.qameta.allure.Step;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static enums.ValidationResult.MANUAL_APPROVAL;
@@ -84,9 +86,7 @@ public class ReportsAssertions {
     public void assertReportQueryConsultaCpf(ResultDTO result) {
         assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaCPF));
         assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
-        List<String> queryNames = result.getResult().getConsultas().stream()
-                .map(QueryDetailsDTO::getNome)
-                .collect(Collectors.toList());
+        Set<String> queryNames = assertQueryDetails(result);
         assertThat(queryNames, hasItem("CPF Receita Federal"));
     }
 
@@ -94,9 +94,7 @@ public class ReportsAssertions {
     public void assertReportQueryConsultaPessoaDefault(ResultDTO result) {
         assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaPessoaDefault));
         assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
-        List<String> queryNames = result.getResult().getConsultas().stream()
-                .map(QueryDetailsDTO::getNome)
-                .collect(Collectors.toList());
+        Set<String> queryNames = assertQueryDetails(result);
         assertThat(queryNames, hasItems("Processos SP", "CPF Receita Federal", "Antecedentes Federal", "Protestos"));
     }
 
@@ -104,12 +102,17 @@ public class ReportsAssertions {
     public void assertReportQueryConsultaEmpresaDefault(ResultDTO result) {
         assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaEmpresaDefault));
         assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
-        List<String> queryNames = result.getResult().getConsultas().stream()
-                .map(QueryDetailsDTO::getNome)
-                .collect(Collectors.toList());
+        Set<String> queryNames = assertQueryDetails(result);
         assertThat(queryNames, hasItems("Regularidade FGTS na Caixa", "Processos SP", "CEIS Tranparência",
                 "CNEP Transparência", "Certidão Negativa de Débitos Trabalhistas", "Divida Ativa na Fazenda",
                 "CNPJ Receita Federal", "Protestos"));
+    }
+
+    private Set<String> assertQueryDetails(ResultDTO result) {
+        Map<String, Integer> queryDetails = result.getResult().getConsultas().stream()
+                .collect(Collectors.toMap(QueryDetailsDTO::getNome, query -> query.getTentativas().size()));
+        assertThat(queryDetails.values(), everyItem(is(lessThanOrEqualTo(5))));
+        return queryDetails.keySet();
     }
 
     @Step
