@@ -10,8 +10,12 @@ import support.ReportsAssertions;
 import support.ReportsData;
 import support.ReportsSteps;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import static enums.DocumentType.PESSOA;
+import static enums.FilterParameters.*;
 import static enums.ReportMatrix.consultaCPF;
 import static enums.ReportQuery.*;
 
@@ -84,5 +88,23 @@ public class ConsultaCpfTest {
         UUID reportId = result.getResult().getNumero();
         ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_PARAMETERS, reportId);
         reportsAssertions.assertReportParametersConsultaCpf(validReportData, validationResult);
+    }
+
+    @Test
+    @Description("Filter requested report for matrix consultaCPF in reports list")
+    @Severity(SeverityLevel.CRITICAL)
+    public void filterConsultaCpfReportInList() {
+        Map<String, Object> filterParameters = getFilterParameters();
+        ResultDTO result = reportsSteps.getFilteredReport(filterParameters);
+        reportsAssertions.assertFilteredReport(filterParameters, result);
+    }
+
+    private Map<String, Object> getFilterParameters() {
+        Map<String, Object> filterParams = new HashMap<>();
+        filterParams.put(numero_documento.name(), validReportData.getParametros().getCpf_numero());
+        filterParams.put(tipo_pessoa.name(), PESSOA);
+        filterParams.put(matriz.name(), consultaCPF);
+        filterParams.put(numero.name(), result.getResult().getNumero());
+        return filterParams;
     }
 }

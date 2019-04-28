@@ -1,11 +1,19 @@
 package support;
 
-import dtos.*;
+import dtos.ManualApprovalRequestDTO;
+import dtos.ReportRequestDTO;
+import dtos.ResultDTO;
+import dtos.ResultDetailsDTO;
 import enums.ReportQuery;
 import io.qameta.allure.Step;
+import io.restassured.RestAssured;
+import io.restassured.config.EncoderConfig;
+import io.restassured.config.RestAssuredConfig;
+import io.restassured.http.ContentType;
 import org.awaitility.Awaitility;
 import utilities.RequestParams;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -68,17 +76,24 @@ public class ReportsSteps {
         return queryResult.get();
     }
 
-    private ResultDTO getReportProcessing(ReportQuery reportQuery, UUID reportId) {
+    @Step
+    public ResultDTO getFilteredReport(Map<String, Object> formParams) {
+        RestAssuredConfig config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig()
+                .encodeContentTypeAs("x-www-form-urlencoded", ContentType.URLENC));
+
         return RequestParams.getInstance().getRequestParams()
-                .pathParam("reportId", reportId)
+                .config(config)
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParams(formParams)
         .when()
-                .get(reportQuery.getReportEndpoint())
+                .post("/relatorios")
                 .prettyPeek()
         .then()
                 .statusCode(HTTP_OK)
                 .extract().as(ResultDTO.class);
     }
 
+    @Step
     public ResultDTO manualApproval(UUID reportId, ManualApprovalRequestDTO request) {
         return RequestParams.getInstance().getRequestParams()
                 .pathParam("reportId", reportId)
@@ -88,6 +103,17 @@ public class ReportsSteps {
                 .post("/relatorios/validar/{reportId}")
                 .prettyPeek()
         .then()
+                .statusCode(HTTP_OK)
+                .extract().as(ResultDTO.class);
+    }
+
+    private ResultDTO getReportProcessing(ReportQuery reportQuery, UUID reportId) {
+        return RequestParams.getInstance().getRequestParams()
+                .pathParam("reportId", reportId)
+                .when()
+                .get(reportQuery.getReportEndpoint())
+                .prettyPeek()
+                .then()
                 .statusCode(HTTP_OK)
                 .extract().as(ResultDTO.class);
     }

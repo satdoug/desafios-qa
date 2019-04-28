@@ -10,8 +10,12 @@ import support.ReportsAssertions;
 import support.ReportsData;
 import support.ReportsSteps;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import static enums.DocumentType.EMPRESA;
+import static enums.FilterParameters.*;
 import static enums.ReportMatrix.consultaEmpresaDefault;
 import static enums.ReportQuery.*;
 
@@ -84,5 +88,23 @@ public class ConsultaEmpresaDefaultTest {
         UUID reportId = result.getResult().getNumero();
         ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_PARAMETERS, reportId);
         reportsAssertions.assertReportParametersConsultaEmpresaDefault(validReportData, validationResult);
+    }
+
+    @Test
+    @Description("Filter requested report for matrix consultaEmpresaDefault in reports list")
+    @Severity(SeverityLevel.CRITICAL)
+    public void filterConsultaEmpresaDefaultReportInList() {
+        Map<String, Object> filterParameters = getFilterParameters();
+        ResultDTO result = reportsSteps.getFilteredReport(filterParameters);
+        reportsAssertions.assertFilteredReport(filterParameters, result);
+    }
+
+    private Map<String, Object> getFilterParameters() {
+        Map<String, Object> filterParams = new HashMap<>();
+        filterParams.put(numero_documento.name(), validReportData.getParametros().getCnpj_numero());
+        filterParams.put(tipo_pessoa.name(), EMPRESA);
+        filterParams.put(matriz.name(), consultaEmpresaDefault);
+        filterParams.put(numero.name(), result.getResult().getNumero());
+        return filterParams;
     }
 }

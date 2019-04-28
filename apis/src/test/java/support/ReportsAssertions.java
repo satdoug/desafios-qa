@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static enums.FilterParameters.*;
 import static enums.ValidationResult.MANUAL_APPROVAL;
 import static enums.ValidationResult.VALID;
 import static java.net.HttpURLConnection.HTTP_OK;
@@ -139,6 +140,20 @@ public class ReportsAssertions {
         assertThat(result.getResult().getResultado(), is(VALID));
         assertThat(result.getResult().getNome(), is(ReportMatrix.consultaEmpresaDefault));
         assertThat(result.getResult().getParametros().getCnpj(), is(reportData.getParametros().getCnpj_numero()));
+    }
+
+    @Step
+    public void assertFilteredReport(Map<String, Object> filterParameters, ResultDTO result) {
+        ReportItemDTO filteredItem = result.getResult().getItens().stream()
+                .filter(item -> item.getNumero().equals(filterParameters.get(numero.name())))
+                .findFirst().orElse(null);
+        assertThat(result.getResult().getPaginacao().getAtual(), is(1));
+        assertThat(result.getResult().getPaginacao().getLinhas(), is(1));
+        assertThat(result.getResult().getPaginacao().getTotal(), is(1));
+        assertThat(filteredItem, not(nullValue()));
+        assertThat(filteredItem.getNumero_documento(), is(filterParameters.get(numero_documento.name())));
+        assertThat(filteredItem.getTipo_pessoa(), is(filterParameters.get(tipo_pessoa.name())));
+        assertThat(filteredItem.getNome(), is(filterParameters.get(matriz.name())));
     }
 
     @Step

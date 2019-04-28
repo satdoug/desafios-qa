@@ -35,6 +35,8 @@ public class ResultDetailsDTO {
     private String status_protocolo;
     private List<QueryDetailsDTO> consultas;
     private ResultParametersDTO parametros;
+    private List<ReportItemDTO> itens;
+    private PaginationDTO paginacao;
 
     public UUID getNumero() {
         return numero;
@@ -218,5 +220,21 @@ public class ResultDetailsDTO {
 
     public void setParametros(ResultParametersDTO parametros) {
         this.parametros = parametros;
+    }
+
+    public List<ReportItemDTO> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ReportItemDTO> itens) {
+        this.itens = itens;
+    }
+
+    public PaginationDTO getPaginacao() {
+        return paginacao;
+    }
+
+    public void setPaginacao(PaginationDTO paginacao) {
+        this.paginacao = paginacao;
     }
 }
