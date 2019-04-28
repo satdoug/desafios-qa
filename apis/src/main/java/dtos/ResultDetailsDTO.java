@@ -39,6 +39,12 @@ public class ResultDetailsDTO {
     private PaginationDTO paginacao;
     private String busca;
     private DocumentDetailsDTO dados;
+    private String api_token;
+    private String email;
+    private String nome_usuario;
+    private String webhook_url;
+    private String nome_organizacao;
+    private String id_organizacao;
 
 
     public UUID getNumero() {
@@ -255,5 +261,53 @@ public class ResultDetailsDTO {
 
     public void setDados(DocumentDetailsDTO dados) {
         this.dados = dados;
+    }
+
+    public String getApi_token() {
+        return api_token;
+    }
+
+    public void setApi_token(String api_token) {
+        this.api_token = api_token;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNome_usuario() {
+        return nome_usuario;
+    }
+
+    public void setNome_usuario(String nome_usuario) {
+        this.nome_usuario = nome_usuario;
+    }
+
+    public String getWebhook_url() {
+        return webhook_url;
+    }
+
+    public void setWebhook_url(String webhook_url) {
+        this.webhook_url = webhook_url;
+    }
+
+    public String getNome_organizacao() {
+        return nome_organizacao;
+    }
+
+    public void setNome_organizacao(String nome_organizacao) {
+        this.nome_organizacao = nome_organizacao;
+    }
+
+    public String getId_organizacao() {
+        return id_organizacao;
+    }
+
+    public void setId_organizacao(String id_organizacao) {
+        this.id_organizacao = id_organizacao;
     }
 }

@@ -1,6 +1,5 @@
 package reports;
 
-import dtos.MatrixResultDTO;
 import dtos.ResultDTO;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
@@ -12,10 +11,8 @@ import org.junit.jupiter.api.Test;
 import support.ReportsAssertions;
 import support.ReportsSteps;
 
-import static enums.ReportMatrix.consultaPessoaDefault;
-
-@Tags({@Tag("all"), @Tag("matrixReports")})
-public class MatrixReportsTest {
+@Tags({@Tag("all"), @Tag("userReport")})
+public class UserReportTest {
 
     private static ReportsSteps reportsSteps;
     private static ReportsAssertions reportsAssertions;
@@ -27,18 +24,10 @@ public class MatrixReportsTest {
     }
 
     @Test
-    @Description("Get matrix list allowed for the token")
+    @Description("Get user details")
     @Severity(SeverityLevel.NORMAL)
-    public void getMatrixList() {
-        ResultDTO result = reportsSteps.getMatrixList();
-        reportsAssertions.assertMatrixList(result);
-    }
-
-    @Test
-    @Description("Get matrix details")
-    @Severity(SeverityLevel.NORMAL)
-    public void getMatrixDetails() {
-        MatrixResultDTO result = reportsSteps.getMatrixDetails(consultaPessoaDefault);
-        reportsAssertions.assertMatrixDetailsConsultaPessoaDefault(result);
+    public void getUserDetails() {
+        ResultDTO result = reportsSteps.getUserDetails();
+        reportsAssertions.assertUserDetails(result);
     }
 }

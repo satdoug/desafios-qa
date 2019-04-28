@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static enums.ReportEndpoint.MATRIX_ALL;
 import static enums.ReportEndpoint.MATRIX_DETAILS;
+import static enums.ReportEndpoint.USER_DETAILS;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -160,5 +161,15 @@ public class ReportsSteps {
         .then()
                 .statusCode(HTTP_OK)
                 .extract().as(MatrixResultDTO.class);
+    }
+
+    @Step
+    public ResultDTO getUserDetails() {
+        return RequestParams.getInstance().getRequestParams().when()
+                .get(USER_DETAILS.getReportEndpoint())
+                .prettyPeek()
+        .then()
+                .statusCode(HTTP_OK)
+                .extract().as(ResultDTO.class);
     }
 }

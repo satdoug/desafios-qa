@@ -4,6 +4,7 @@ import dtos.*;
 import enums.ReportMatrix;
 import enums.ValidationResult;
 import io.qameta.allure.Step;
+import utilities.ProjectProperties;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import static enums.ValidationResult.VALID;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static utilities.ProjectProperties.TOKEN;
 
 public class ReportsAssertions {
 
@@ -210,6 +212,7 @@ public class ReportsAssertions {
         assertThat(actualMatrixes, containsInAnyOrder(expectedMatrixes.toArray()));
     }
 
+    @Step
     public void assertMatrixDetailsConsultaPessoaDefault(MatrixResultDTO result) {
         List<String> parameters = result.getResult().getParametros().stream()
                 .map(ResultParametersDTO::getNome)
@@ -218,6 +221,11 @@ public class ReportsAssertions {
         assertThat(result.getResult().getNome(), is(consultaPessoaDefault));
         assertThat(parameters, hasItems("cpf_data_de_nascimento", "cpf_nome", "cpf_numero"));
         assertThat(result.getResult().getTipo(), is("Pessoa"));
+    }
+
+    @Step
+    public void assertUserDetails(ResultDTO result) {
+        assertThat(result.getResult().getApi_token(), is(ProjectProperties.getProperty(TOKEN)));
     }
 
 }

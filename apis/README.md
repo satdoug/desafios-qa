@@ -48,6 +48,8 @@ Functionalities available:
 * consultaCPF
 * consultaEmpresaDefault
 * manualApproval
+* matrixReports
+* userReport
 ### Run tests cases with blocker severity
 ```text
 mvn clean test -DtestGroup="blocker"
