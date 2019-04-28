@@ -34,6 +34,7 @@ public class ResultDetailsDTO {
     private ReportMatrix nome_matriz;
     private String status_protocolo;
     private List<QueryDetailsDTO> consultas;
+    private ResultParametersDTO parametros;
 
     public UUID getNumero() {
         return numero;
@@ -209,5 +210,13 @@ public class ResultDetailsDTO {
 
     public void setConsultas(List<QueryDetailsDTO> consultas) {
         this.consultas = consultas;
+    }
+
+    public ResultParametersDTO getParametros() {
+        return parametros;
+    }
+
+    public void setParametros(ResultParametersDTO parametros) {
+        this.parametros = parametros;
     }
 }

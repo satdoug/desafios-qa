@@ -1,9 +1,6 @@
 package support;
 
-import dtos.QueryDetailsDTO;
-import dtos.ResultDTO;
-import dtos.ResultDetailsDTO;
-import dtos.ValidationRulesDTO;
+import dtos.*;
 import enums.ReportMatrix;
 import enums.ValidationResult;
 import io.qameta.allure.Step;
@@ -113,6 +110,35 @@ public class ReportsAssertions {
                 .collect(Collectors.toMap(QueryDetailsDTO::getNome, query -> query.getTentativas().size()));
         assertThat(queryDetails.values(), everyItem(is(lessThanOrEqualTo(5))));
         return queryDetails.keySet();
+    }
+
+    @Step
+    public void assertReportParametersConsultaCpf(ReportRequestDTO reportData, ResultDTO result) {
+        assertThat(result.getResult().getResultado(), is(VALID));
+        assertThat(result.getResult().getNome(), is(ReportMatrix.consultaCPF));
+        assertThat(result.getResult().getParametros(), allOf(
+                hasProperty("cpf", is(reportData.getParametros().getCpf_numero())),
+                hasProperty("nome", is(reportData.getParametros().getCpf_nome())),
+                hasProperty("data_de_nascimento", is(reportData.getParametros().getCpf_data_de_nascimento()))
+        ));
+    }
+
+    @Step
+    public void assertReportParametersConsultaPessoaDefault(ReportRequestDTO reportData, ResultDTO result) {
+        assertThat(result.getResult().getResultado(), is(VALID));
+        assertThat(result.getResult().getNome(), is(ReportMatrix.consultaPessoaDefault));
+        assertThat(result.getResult().getParametros(), allOf(
+                hasProperty("cpf", is(reportData.getParametros().getCpf_numero())),
+                hasProperty("nome", is(reportData.getParametros().getCpf_nome())),
+                hasProperty("data_de_nascimento", is(reportData.getParametros().getCpf_data_de_nascimento()))
+        ));
+    }
+
+    @Step
+    public void assertReportParametersConsultaEmpresaDefault(ReportRequestDTO reportData, ResultDTO result) {
+        assertThat(result.getResult().getResultado(), is(VALID));
+        assertThat(result.getResult().getNome(), is(ReportMatrix.consultaEmpresaDefault));
+        assertThat(result.getResult().getParametros().getCnpj(), is(reportData.getParametros().getCnpj_numero()));
     }
 
     @Step

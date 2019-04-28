@@ -5,7 +5,7 @@ import enums.ReportMatrix;
 public class ReportRequestDTO {
 
     private ReportMatrix matriz;
-    private ReportParameters parametros;
+    private RequestParametersDTO parametros;
 
     public ReportMatrix getMatriz() {
         return matriz;
@@ -15,11 +15,11 @@ public class ReportRequestDTO {
         this.matriz = matriz;
     }
 
-    public ReportParameters getParametros() {
+    public RequestParametersDTO getParametros() {
         return parametros;
     }
 
-    public void setParametros(ReportParameters parametros) {
+    public void setParametros(RequestParametersDTO parametros) {
         this.parametros = parametros;
     }
 }

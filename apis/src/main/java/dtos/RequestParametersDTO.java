@@ -1,10 +1,16 @@
 package dtos;
 
-public class ReportParametersPersonDTO implements ReportParameters {
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+@JsonInclude(NON_NULL)
+public class RequestParametersDTO {
 
     private String cpf_data_de_nascimento;
     private String cpf_nome;
     private String cpf_numero;
+    private String cnpj_numero;
 
     public String getCpf_data_de_nascimento() {
         return cpf_data_de_nascimento;
@@ -28,5 +34,13 @@ public class ReportParametersPersonDTO implements ReportParameters {
 
     public void setCpf_numero(String cpf_numero) {
         this.cpf_numero = cpf_numero;
+    }
+
+    public String getCnpj_numero() {
+        return cnpj_numero;
+    }
+
+    public void setCnpj_numero(String cnpj_numero) {
+        this.cnpj_numero = cnpj_numero;
     }
 }

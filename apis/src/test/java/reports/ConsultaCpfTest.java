@@ -22,6 +22,7 @@ public class ConsultaCpfTest {
     private static ReportsData reportsData;
     private static ReportsAssertions reportsAssertions;
     private ResultDTO result;
+    private ReportRequestDTO validReportData;
 
     @BeforeAll
     public static void setUp() {
@@ -33,7 +34,7 @@ public class ConsultaCpfTest {
     @BeforeEach
     public void postAndAssertValidReport() {
         if (result == null) {
-            ReportRequestDTO validReportData = reportsData.getValidReportData(consultaCPF);
+            validReportData = reportsData.getValidReportData(consultaCPF);
             result = reportsSteps.createReport(validReportData);
             reportsAssertions.assertValidResult(result);
         }
@@ -74,5 +75,14 @@ public class ConsultaCpfTest {
         UUID reportId = result.getResult().getNumero();
         ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(reportId);
         reportsAssertions.assertReportQueryConsultaCpf(validationResult);
+    }
+
+    @Test
+    @Description("Request parameters report for matrix consultaCPF")
+    @Severity(SeverityLevel.CRITICAL)
+    public void requestParametersReportConsultaCpf() {
+        UUID reportId = result.getResult().getNumero();
+        ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_PARAMETERS, reportId);
+        reportsAssertions.assertReportParametersConsultaCpf(validReportData, validationResult);
     }
 }

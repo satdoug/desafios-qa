@@ -13,9 +13,7 @@ import support.ReportsSteps;
 import java.util.UUID;
 
 import static enums.ReportMatrix.consultaEmpresaDefault;
-import static enums.ReportQuery.REPORT_BASIC;
-import static enums.ReportQuery.REPORT_DATA;
-import static enums.ReportQuery.REPORT_VALIDATION;
+import static enums.ReportQuery.*;
 
 @Tags({@Tag("all"), @Tag("consultaEmpresaDefault")})
 public class ConsultaEmpresaDefaultTest {
@@ -24,6 +22,7 @@ public class ConsultaEmpresaDefaultTest {
     private static ReportsData reportsData;
     private static ReportsAssertions reportsAssertions;
     private ResultDTO result;
+    private ReportRequestDTO validReportData;
 
     @BeforeAll
     public static void setUp() {
@@ -35,7 +34,7 @@ public class ConsultaEmpresaDefaultTest {
     @BeforeEach
     public void postAndAssertValidReport() {
         if (result == null) {
-            ReportRequestDTO validReportData = reportsData.getValidReportData(consultaEmpresaDefault);
+            validReportData = reportsData.getValidReportData(consultaEmpresaDefault);
             result = reportsSteps.createReport(validReportData);
             reportsAssertions.assertValidResult(result);
         }
@@ -76,5 +75,14 @@ public class ConsultaEmpresaDefaultTest {
         UUID reportId = result.getResult().getNumero();
         ResultDTO validationResult = reportsSteps.awaitFinishReportQuery(reportId);
         reportsAssertions.assertReportQueryConsultaEmpresaDefault(validationResult);
+    }
+
+    @Test
+    @Description("Request parameters report for matrix consultaEmpresaDefault")
+    @Severity(SeverityLevel.CRITICAL)
+    public void requestParametersReportConsultaEmpresaDefault() {
+        UUID reportId = result.getResult().getNumero();
+        ResultDTO validationResult = reportsSteps.awaitFinishReportProcessing(REPORT_PARAMETERS, reportId);
+        reportsAssertions.assertReportParametersConsultaEmpresaDefault(validReportData, validationResult);
     }
 }

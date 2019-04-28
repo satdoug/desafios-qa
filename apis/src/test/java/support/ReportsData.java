@@ -22,7 +22,7 @@ public class ReportsData {
 
     @Step
     public ReportRequestDTO getValidReportData(ReportMatrix reportMatrix) {
-        ReportParameters parameters = getValidParameters(reportMatrix);
+        RequestParametersDTO parameters = getValidParameters(reportMatrix);
         ReportRequestDTO report = new ReportRequestDTO();
         report.setMatriz(reportMatrix);
         report.setParametros(parameters);
@@ -34,24 +34,24 @@ public class ReportsData {
         return ManualApprovalRandomizer.getInstance().getRandomValue();
     }
 
-    private ReportParameters getValidParameters(ReportMatrix reportMatrix) {
+    private RequestParametersDTO getValidParameters(ReportMatrix reportMatrix) {
         return reportMatrix.equals(ReportMatrix.consultaEmpresaDefault)
                 ? getValidCompanyParameters()
                 : getValidPersonParameters();
     }
 
-    private ReportParametersPersonDTO getValidPersonParameters() {
+    private RequestParametersDTO getValidPersonParameters() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String birthday = LocalDate.parse(getProperty(VALID_BIRTHDAY)).format(formatter);
-        ReportParametersPersonDTO parameter = new ReportParametersPersonDTO();
+        RequestParametersDTO parameter = new RequestParametersDTO();
         parameter.setCpf_nome(getProperty(VALID_NAME));
         parameter.setCpf_numero(getProperty(VALID_NUMBER));
         parameter.setCpf_data_de_nascimento(birthday);
         return parameter;
     }
 
-    private ReportParametersCompanyDTO getValidCompanyParameters() {
-        ReportParametersCompanyDTO parameter = new ReportParametersCompanyDTO();
+    private RequestParametersDTO getValidCompanyParameters() {
+        RequestParametersDTO parameter = new RequestParametersDTO();
         parameter.setCnpj_numero(getProperty(VALID_COMPANY_NUMBER));
         return parameter;
     }
