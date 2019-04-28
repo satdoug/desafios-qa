@@ -2,22 +2,23 @@ package reports;
 
 import dtos.ManualApprovalRequestDTO;
 import dtos.ReportRequestDTO;
-import dtos.ResultBatchNumberDTO;
-import dtos.ResultReportValidationDTO;
+import dtos.ResultDTO;
 import enums.ReportMatrix;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
+import org.junit.jupiter.api.Test;
 import support.ReportsAssertions;
 import support.ReportsData;
 import support.ReportsSteps;
 
 import java.util.UUID;
 
-import static enums.ReportMatrix.consultaCPF;
-import static enums.ReportMatrix.consultaEmpresaDefault;
-import static enums.ReportMatrix.consultaPessoaDefault;
+import static enums.ReportMatrix.*;
+import static enums.ReportQuery.REPORT_VALIDATION;
 
 @Tags({@Tag("all"), @Tag("manualApproval")})
 public class ManualApprovalTest {
@@ -39,7 +40,7 @@ public class ManualApprovalTest {
     @Severity(SeverityLevel.CRITICAL)
     public void approveReportConsultaPessoaDefaultManually() {
         UUID reportId = postAndAssertValidReport(consultaPessoaDefault).getResult().getNumero();
-        ResultBatchNumberDTO manualReportResult = postAndAssertManualApproval(reportId);
+        ResultDTO manualReportResult = postAndAssertManualApproval(reportId);
         getAndAssertReportValidatedManually(manualReportResult);
     }
 
@@ -49,7 +50,7 @@ public class ManualApprovalTest {
     @Severity(SeverityLevel.CRITICAL)
     public void approveReportConsultaCpfManually() {
         UUID reportId = postAndAssertValidReport(consultaCPF).getResult().getNumero();
-        ResultBatchNumberDTO manualReportResult = postAndAssertManualApproval(reportId);
+        ResultDTO manualReportResult = postAndAssertManualApproval(reportId);
         getAndAssertReportValidatedManually(manualReportResult);
     }
 
@@ -59,27 +60,27 @@ public class ManualApprovalTest {
     @Severity(SeverityLevel.CRITICAL)
     public void approveReportConsultaEmpresaDefaultManually() {
         UUID reportId = postAndAssertValidReport(consultaEmpresaDefault).getResult().getNumero();
-        ResultBatchNumberDTO manualReportResult = postAndAssertManualApproval(reportId);
+        ResultDTO manualReportResult = postAndAssertManualApproval(reportId);
         getAndAssertReportValidatedManually(manualReportResult);
     }
 
-    private ResultBatchNumberDTO postAndAssertValidReport(ReportMatrix reportMatrix) {
+    private ResultDTO postAndAssertValidReport(ReportMatrix reportMatrix) {
         ReportRequestDTO validReportData = reportsData.getValidReportData(reportMatrix);
-        ResultBatchNumberDTO result = reportsSteps.createReport(validReportData);
+        ResultDTO result = reportsSteps.createReport(validReportData);
         reportsAssertions.assertValidResult(result);
         return result;
     }
 
-    private ResultBatchNumberDTO postAndAssertManualApproval(UUID reportId) {
+    private ResultDTO postAndAssertManualApproval(UUID reportId) {
         ManualApprovalRequestDTO validReportData = reportsData.getManualApproval();
-        ResultBatchNumberDTO manualReportResult = reportsSteps.manualApproval(reportId, validReportData);
+        ResultDTO manualReportResult = reportsSteps.manualApproval(reportId, validReportData);
         reportsAssertions.assertValidResult(manualReportResult);
         return manualReportResult;
     }
 
-    private void getAndAssertReportValidatedManually(ResultBatchNumberDTO manualReportResult) {
+    private void getAndAssertReportValidatedManually(ResultDTO manualReportResult) {
         UUID manualReportId = manualReportResult.getResult().getNumero();
-        ResultReportValidationDTO validationResult = reportsSteps.awaitFinishReportValidation(manualReportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_VALIDATION, manualReportId);
         reportsAssertions.assertReportValidatedManually(validationResult);
     }
 }

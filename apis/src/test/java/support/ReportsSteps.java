@@ -1,6 +1,7 @@
 package support;
 
 import dtos.*;
+import enums.ReportQuery;
 import io.qameta.allure.Step;
 import org.awaitility.Awaitility;
 import utilities.RequestParams;
@@ -24,7 +25,7 @@ public class ReportsSteps {
     }
 
     @Step
-    public ResultBatchNumberDTO createReport(ReportRequestDTO request) {
+    public ResultDTO createReport(ReportRequestDTO request) {
         return RequestParams.getInstance().getRequestParams()
                 .header(CONTENT_TYPE, "application/json")
                 .body(request)
@@ -33,37 +34,26 @@ public class ReportsSteps {
                 .prettyPeek()
             .then()
                 .statusCode(HTTP_OK)
-                .extract().as(ResultBatchNumberDTO.class);
+                .extract().as(ResultDTO.class);
     }
 
     @Step
-    public ResultReportValidationDTO awaitFinishReportValidation(UUID reportId) {
-        AtomicReference<ResultReportValidationDTO> validationResult = new AtomicReference<>();
+    public ResultDTO awaitFinishReportValidation(ReportQuery reportQuery, UUID reportId) {
+        AtomicReference<ResultDTO> queryResult = new AtomicReference<>();
         Awaitility.pollInSameThread();
         Awaitility.await()
                 .atMost(5, MINUTES)
                 .pollInterval(5, SECONDS)
                 .until(() -> {
-                    validationResult.set(getReportValidation(reportId));
-                    ValidationResultDTO result = validationResult.get().getResult();
+                    queryResult.set(ReportQueryFactory.getInstance().getReportQuery(reportQuery, reportId));
+                    ResultDetailsDTO result = queryResult.get().getResult();
                     return result.getStatus().equals("CONCLUIDO")
                             || result.getResultado() != null;
                 });
-        return validationResult.get();
+        return queryResult.get();
     }
 
-    private ResultReportValidationDTO getReportValidation(UUID reportId) {
-        return RequestParams.getInstance().getRequestParams()
-                .pathParam("reportId", reportId)
-        .when()
-                .get("/relatorios/{reportId}/validacoes")
-                .prettyPeek()
-        .then()
-                .statusCode(HTTP_OK)
-                .extract().as(ResultReportValidationDTO.class);
-    }
-
-    public ResultBatchNumberDTO manualApproval(UUID reportId, ManualApprovalRequestDTO request) {
+    public ResultDTO manualApproval(UUID reportId, ManualApprovalRequestDTO request) {
         return RequestParams.getInstance().getRequestParams()
                 .pathParam("reportId", reportId)
                 .header(CONTENT_TYPE, "application/json")
@@ -73,6 +63,6 @@ public class ReportsSteps {
                 .prettyPeek()
         .then()
                 .statusCode(HTTP_OK)
-                .extract().as(ResultBatchNumberDTO.class);
+                .extract().as(ResultDTO.class);
     }
 }

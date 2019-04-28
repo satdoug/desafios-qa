@@ -1,8 +1,7 @@
 package support;
 
-import dtos.ResultBatchNumberDTO;
-import dtos.ResultReportValidationDTO;
-import dtos.ValidationResultDTO;
+import dtos.ResultDTO;
+import dtos.ResultDetailsDTO;
 import dtos.ValidationRulesDTO;
 import enums.ValidationResult;
 import io.qameta.allure.Step;
@@ -27,26 +26,31 @@ public class ReportsAssertions {
     }
 
     @Step
-    public void assertValidResult(ResultBatchNumberDTO result) {
+    public void assertValidResult(ResultDTO result) {
         assertThat(result.getStatus_code(), is(HTTP_OK));
         assertThat(result.getResult(), not(nullValue()));
         assertThat(result.getResult().getNumero(), not(nullValue()));
     }
 
     @Step
-    public void assertReportValidation(ResultReportValidationDTO validationResult) {
-        ValidationResultDTO result = validationResult.getResult();
-        assertThat(result.getResultado(), is(VALID));
-        assertThat(result.getValidado_manualmente(), is(false));
-        List<ValidationResult> allResults = result.getValidacoes().stream()
+    public void assertReportData(ResultDTO result) {
+        ResultDetailsDTO resultDetails = result.getResult();
+        assertThat(resultDetails.getResultado(), is(VALID));
+        assertThat(resultDetails.getValidado_manualmente(), is(false));
+    }
+
+    @Step
+    public void assertReportValidation(ResultDTO result) {
+        assertReportData(result);
+        List<ValidationResult> allResults = result.getResult().getValidacoes().stream()
                 .map(ValidationRulesDTO::getResultado)
                 .collect(Collectors.toList());
         assertThat(allResults, everyItem(is(VALID)));
     }
 
     @Step
-    public void assertReportValidatedManually(ResultReportValidationDTO validationResult) {
-        ValidationResultDTO result = validationResult.getResult();
+    public void assertReportValidatedManually(ResultDTO validationResult) {
+        ResultDetailsDTO result = validationResult.getResult();
         assertThat(result.getResultado(), is(MANUAL_APPROVAL));
         assertThat(result.getValidado_manualmente(), is(true));
     }

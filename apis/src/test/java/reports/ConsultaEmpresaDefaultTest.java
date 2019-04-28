@@ -1,8 +1,7 @@
 package reports;
 
 import dtos.ReportRequestDTO;
-import dtos.ResultBatchNumberDTO;
-import dtos.ResultReportValidationDTO;
+import dtos.ResultDTO;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -14,6 +13,8 @@ import support.ReportsSteps;
 import java.util.UUID;
 
 import static enums.ReportMatrix.consultaEmpresaDefault;
+import static enums.ReportQuery.REPORT_DATA;
+import static enums.ReportQuery.REPORT_VALIDATION;
 
 @Tags({@Tag("all"), @Tag("consultaEmpresaDefault")})
 public class ConsultaEmpresaDefaultTest {
@@ -21,7 +22,7 @@ public class ConsultaEmpresaDefaultTest {
     private static ReportsSteps reportsSteps;
     private static ReportsData reportsData;
     private static ReportsAssertions reportsAssertions;
-    private ResultBatchNumberDTO result;
+    private ResultDTO result;
 
     @BeforeAll
     public static void setUp() {
@@ -40,12 +41,21 @@ public class ConsultaEmpresaDefaultTest {
     }
 
     @Test
-    @Description("Request a report for matrix consultaEmpresaDefault")
+    @Description("Request validation report for matrix consultaEmpresaDefault")
     @Tag("blocker")
     @Severity(SeverityLevel.BLOCKER)
-    public void requestReportMatrixConsultaEmpresaDefault() {
+    public void requestValidationReportConsultaEmpresaDefault() {
         UUID reportId = result.getResult().getNumero();
-        ResultReportValidationDTO validationResult = reportsSteps.awaitFinishReportValidation(reportId);
+        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_VALIDATION, reportId);
         reportsAssertions.assertReportValidation(validationResult);
+    }
+
+    @Test
+    @Description("Request data report for matrix consultaEmpresaDefault")
+    @Severity(SeverityLevel.CRITICAL)
+    public void requestDataReportConsultaEmpresaDefault() {
+        UUID reportId = result.getResult().getNumero();
+        ResultDTO validationResult = reportsSteps.awaitFinishReportValidation(REPORT_DATA, reportId);
+        reportsAssertions.assertReportData(validationResult);
     }
 }
