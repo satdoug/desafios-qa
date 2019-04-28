@@ -7,5 +7,6 @@ public enum FilterParameters {
     numero,
     resultado,
     status,
-    matriz
+    cpf,
+    cnpj
 }

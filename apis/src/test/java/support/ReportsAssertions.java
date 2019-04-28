@@ -5,6 +5,7 @@ import enums.ReportMatrix;
 import enums.ValidationResult;
 import io.qameta.allure.Step;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -144,16 +145,32 @@ public class ReportsAssertions {
 
     @Step
     public void assertFilteredReport(Map<String, Object> filterParameters, ResultDTO result) {
-        ReportItemDTO filteredItem = result.getResult().getItens().stream()
-                .filter(item -> item.getNumero().equals(filterParameters.get(numero.name())))
-                .findFirst().orElse(null);
-        assertThat(result.getResult().getPaginacao().getAtual(), is(1));
-        assertThat(result.getResult().getPaginacao().getLinhas(), is(1));
-        assertThat(result.getResult().getPaginacao().getTotal(), is(1));
-        assertThat(filteredItem, not(nullValue()));
-        assertThat(filteredItem.getNumero_documento(), is(filterParameters.get(numero_documento.name())));
-        assertThat(filteredItem.getTipo_pessoa(), is(filterParameters.get(tipo_pessoa.name())));
-        assertThat(filteredItem.getNome(), is(filterParameters.get(matriz.name())));
+        assertPagination(result);
+        LinkedHashMap firstItem = (LinkedHashMap) result.getResult().getItens().get(0);
+        assertThat(firstItem.get(numero.name()).toString(), is(filterParameters.get(numero.name()).toString()));
+        assertThat(firstItem.get(numero_documento.name()).toString(), is(filterParameters.get(numero_documento.name()).toString()));
+        assertThat(firstItem.get(tipo_pessoa.name()).toString(), is(filterParameters.get(tipo_pessoa.name()).toString()));
+    }
+
+    @Step
+    public void assertFilteredPeople(Map<String, Object> filterParameters, ResultDTO result) {
+        assertPagination(result);
+        LinkedHashMap firstItem = (LinkedHashMap) result.getResult().getItens().get(0);
+        assertThat(firstItem.get(cpf.name()).toString(), is(filterParameters.get(cpf.name()).toString()));
+    }
+
+    @Step
+    public void assertFilteredCompanies(Map<String, Object> filterParameters, ResultDTO result) {
+        assertPagination(result);
+        LinkedHashMap firstItem = (LinkedHashMap) result.getResult().getItens().get(0);
+        assertThat(firstItem.get(cnpj.name()).toString(), is(filterParameters.get(cnpj.name()).toString()));
+    }
+
+    private void assertPagination(ResultDTO result) {
+        PaginationDTO paginacao = result.getResult().getPaginacao();
+        assertThat(paginacao.getAtual(), is(1));
+        assertThat(paginacao.getLinhas(), is(25));
+        assertThat(paginacao.getTotal(), is(1));
     }
 
     @Step

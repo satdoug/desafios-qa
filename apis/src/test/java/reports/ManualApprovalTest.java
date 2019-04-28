@@ -18,7 +18,7 @@ import support.ReportsSteps;
 import java.util.UUID;
 
 import static enums.ReportMatrix.*;
-import static enums.ReportQuery.REPORT_VALIDATION;
+import static enums.ReportEndpoint.REPORT_VALIDATION;
 
 @Tags({@Tag("all"), @Tag("manualApproval")})
 public class ManualApprovalTest {

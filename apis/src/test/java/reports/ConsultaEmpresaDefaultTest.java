@@ -14,10 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static enums.DocumentType.EMPRESA;
 import static enums.FilterParameters.*;
 import static enums.ReportMatrix.consultaEmpresaDefault;
-import static enums.ReportQuery.*;
+import static enums.ReportEndpoint.*;
 
 @Tags({@Tag("all"), @Tag("consultaEmpresaDefault")})
 public class ConsultaEmpresaDefaultTest {
@@ -94,17 +93,31 @@ public class ConsultaEmpresaDefaultTest {
     @Description("Filter requested report for matrix consultaEmpresaDefault in reports list")
     @Severity(SeverityLevel.CRITICAL)
     public void filterConsultaEmpresaDefaultReportInList() {
-        Map<String, Object> filterParameters = getFilterParameters();
-        ResultDTO result = reportsSteps.getFilteredReport(filterParameters);
+        Map<String, Object> filterParameters = getReportFilterParameters();
+        ResultDTO result = reportsSteps.getFilteredReport(REPORT_ALL, filterParameters);
         reportsAssertions.assertFilteredReport(filterParameters, result);
     }
 
-    private Map<String, Object> getFilterParameters() {
+    @Test
+    @Description("Filter requested report for matrix consultaEmpresaDefault in companies list")
+    @Severity(SeverityLevel.CRITICAL)
+    public void filterConsultaEmpresaDefaultReportInCompaniesList() {
+        Map<String, Object> filterParameters = getCompaniesFilterParameters();
+        ResultDTO result = reportsSteps.getFilteredReport(COMPANIES_ALL, filterParameters);
+        reportsAssertions.assertFilteredCompanies(filterParameters, result);
+    }
+
+    private Map<String, Object> getReportFilterParameters() {
         Map<String, Object> filterParams = new HashMap<>();
         filterParams.put(numero_documento.name(), validReportData.getParametros().getCnpj_numero());
-        filterParams.put(tipo_pessoa.name(), EMPRESA);
-        filterParams.put(matriz.name(), consultaEmpresaDefault);
+        filterParams.put(tipo_pessoa.name(), "Empresa");
         filterParams.put(numero.name(), result.getResult().getNumero());
+        return filterParams;
+    }
+
+    private Map<String, Object> getCompaniesFilterParameters() {
+        Map<String, Object> filterParams = new HashMap<>();
+        filterParams.put(cnpj.name(), validReportData.getParametros().getCnpj_numero());
         return filterParams;
     }
 }

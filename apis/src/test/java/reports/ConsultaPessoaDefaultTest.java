@@ -14,10 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static enums.DocumentType.PESSOA;
 import static enums.FilterParameters.*;
 import static enums.ReportMatrix.consultaPessoaDefault;
-import static enums.ReportQuery.*;
+import static enums.ReportEndpoint.*;
 
 @Tags({@Tag("all"), @Tag("consultaPessoaDefault")})
 public class ConsultaPessoaDefaultTest {
@@ -94,17 +93,31 @@ public class ConsultaPessoaDefaultTest {
     @Description("Filter requested report for matrix consultaPessoaDefault in reports list")
     @Severity(SeverityLevel.CRITICAL)
     public void filterConsultaPessoaDefaultReportInList() {
-        Map<String, Object> filterParameters = getFilterParameters();
-        ResultDTO result = reportsSteps.getFilteredReport(filterParameters);
+        Map<String, Object> filterParameters = getReportFilterParameters();
+        ResultDTO result = reportsSteps.getFilteredReport(REPORT_ALL, filterParameters);
         reportsAssertions.assertFilteredReport(filterParameters, result);
     }
 
-    private Map<String, Object> getFilterParameters() {
+    @Test
+    @Description("Filter requested report for matrix consultaPessoaDefault in people list")
+    @Severity(SeverityLevel.CRITICAL)
+    public void filterConsultaPessoaDefaultReportInPeopleList() {
+        Map<String, Object> filterParameters = getPeopleFilterParameters();
+        ResultDTO result = reportsSteps.getFilteredReport(PEOPLE_ALL, filterParameters);
+        reportsAssertions.assertFilteredPeople(filterParameters, result);
+    }
+
+    private Map<String, Object> getReportFilterParameters() {
         Map<String, Object> filterParams = new HashMap<>();
         filterParams.put(numero_documento.name(), validReportData.getParametros().getCpf_numero());
-        filterParams.put(tipo_pessoa.name(), PESSOA);
-        filterParams.put(matriz.name(), consultaPessoaDefault);
+        filterParams.put(tipo_pessoa.name(), "Pessoa");
         filterParams.put(numero.name(), result.getResult().getNumero());
+        return filterParams;
+    }
+
+    private Map<String, Object> getPeopleFilterParameters() {
+        Map<String, Object> filterParams = new HashMap<>();
+        filterParams.put(cpf.name(), validReportData.getParametros().getCpf_numero());
         return filterParams;
     }
 }

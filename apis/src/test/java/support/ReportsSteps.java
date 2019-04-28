@@ -4,7 +4,7 @@ import dtos.ManualApprovalRequestDTO;
 import dtos.ReportRequestDTO;
 import dtos.ResultDTO;
 import dtos.ResultDetailsDTO;
-import enums.ReportQuery;
+import enums.ReportEndpoint;
 import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -46,14 +46,14 @@ public class ReportsSteps {
     }
 
     @Step
-    public ResultDTO awaitFinishReportProcessing(ReportQuery reportQuery, UUID reportId) {
+    public ResultDTO awaitFinishReportProcessing(ReportEndpoint reportEndpoint, UUID reportId) {
         AtomicReference<ResultDTO> queryResult = new AtomicReference<>();
         Awaitility.pollInSameThread();
         Awaitility.await()
                 .atMost(5, MINUTES)
                 .pollInterval(5, SECONDS)
                 .until(() -> {
-                    queryResult.set(getReportProcessing(reportQuery, reportId));
+                    queryResult.set(getReportProcessing(reportEndpoint, reportId));
                     ResultDetailsDTO result = queryResult.get().getResult();
                     return result.getStatus().equals("CONCLUIDO")
                             || result.getResultado() != null;
@@ -69,7 +69,7 @@ public class ReportsSteps {
                 .atMost(5, MINUTES)
                 .pollInterval(5, SECONDS)
                 .until(() -> {
-                    queryResult.set(getReportProcessing(ReportQuery.REPORT_QUERY, reportId));
+                    queryResult.set(getReportProcessing(ReportEndpoint.REPORT_QUERY, reportId));
                     ResultDetailsDTO result = queryResult.get().getResult();
                     return result.getStatus_protocolo().equals("CONCLUIDO");
                 });
@@ -77,7 +77,7 @@ public class ReportsSteps {
     }
 
     @Step
-    public ResultDTO getFilteredReport(Map<String, Object> formParams) {
+    public ResultDTO getFilteredReport(ReportEndpoint endpoint, Map<String, Object> formParams) {
         RestAssuredConfig config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig()
                 .encodeContentTypeAs("x-www-form-urlencoded", ContentType.URLENC));
 
@@ -86,7 +86,7 @@ public class ReportsSteps {
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParams(formParams)
         .when()
-                .post("/relatorios")
+                .get(endpoint.getReportEndpoint())
                 .prettyPeek()
         .then()
                 .statusCode(HTTP_OK)
@@ -107,13 +107,13 @@ public class ReportsSteps {
                 .extract().as(ResultDTO.class);
     }
 
-    private ResultDTO getReportProcessing(ReportQuery reportQuery, UUID reportId) {
+    private ResultDTO getReportProcessing(ReportEndpoint reportEndpoint, UUID reportId) {
         return RequestParams.getInstance().getRequestParams()
                 .pathParam("reportId", reportId)
-                .when()
-                .get(reportQuery.getReportEndpoint())
+        .when()
+                .get(reportEndpoint.getReportEndpoint())
                 .prettyPeek()
-                .then()
+        .then()
                 .statusCode(HTTP_OK)
                 .extract().as(ResultDTO.class);
     }
