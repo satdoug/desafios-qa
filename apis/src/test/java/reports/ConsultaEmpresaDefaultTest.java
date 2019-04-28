@@ -107,6 +107,14 @@ public class ConsultaEmpresaDefaultTest {
         reportsAssertions.assertFilteredCompanies(filterParameters, result);
     }
 
+    @Test
+    @Description("Get company details after request report for matrix consultaEmpresaDetails")
+    @Severity(SeverityLevel.CRITICAL)
+    public void getCompanyDetailsAfterConsultaEmpresaDetails() {
+        ResultDTO companyResult = reportsSteps.getReportDetails(COMPANIES_DETAILS, validReportData.getParametros().getCnpj_numero());
+        reportsAssertions.assertCompanyDetails(validReportData, result.getResult().getNumero(), companyResult);
+    }
+
     private Map<String, Object> getReportFilterParameters() {
         Map<String, Object> filterParams = new HashMap<>();
         filterParams.put(numero_documento.name(), validReportData.getParametros().getCnpj_numero());

@@ -38,6 +38,7 @@ public class ResultDetailsDTO {
     private List<Object> itens;
     private PaginationDTO paginacao;
     private String busca;
+    private DocumentDetailsDTO dados;
 
     public UUID getNumero() {
         return numero;
@@ -245,5 +246,13 @@ public class ResultDetailsDTO {
 
     public void setBusca(String busca) {
         this.busca = busca;
+    }
+
+    public DocumentDetailsDTO getDados() {
+        return dados;
+    }
+
+    public void setDados(DocumentDetailsDTO dados) {
+        this.dados = dados;
     }
 }

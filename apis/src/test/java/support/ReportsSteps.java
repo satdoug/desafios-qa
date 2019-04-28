@@ -13,6 +13,7 @@ import io.restassured.http.ContentType;
 import org.awaitility.Awaitility;
 import utilities.RequestParams;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -85,6 +86,27 @@ public class ReportsSteps {
                 .config(config)
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParams(formParams)
+        .when()
+                .get(endpoint.getReportEndpoint())
+                .prettyPeek()
+        .then()
+                .statusCode(HTTP_OK)
+                .extract().as(ResultDTO.class);
+    }
+
+    @Step
+    public ResultDTO getReportDetails(ReportEndpoint endpoint, String documentNumber) {
+        RestAssuredConfig config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig()
+                .encodeContentTypeAs("x-www-form-urlencoded", ContentType.URLENC));
+        Map<String, Integer> formParams = new HashMap<>();
+        formParams.put("page", 1);
+        formParams.put("rows", 100);
+
+        return RequestParams.getInstance().getRequestParams()
+                .config(config)
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParams(formParams)
+                .pathParam("documentNumber", documentNumber)
         .when()
                 .get(endpoint.getReportEndpoint())
                 .prettyPeek()

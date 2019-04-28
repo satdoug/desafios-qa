@@ -8,7 +8,9 @@ public enum ReportEndpoint {
     REPORT_PARAMETERS("/relatorios/{reportId}/parametros"),
     REPORT_ALL("/relatorios"),
     PEOPLE_ALL("/pessoas"),
-    COMPANIES_ALL("/empresas");
+    PEOPLE_DETAILS("/pessoas/{documentNumber}"),
+    COMPANIES_ALL("/empresas"),
+    COMPANIES_DETAILS("/empresas/{documentNumber}");
 
     private final String reportEndpoint;
 

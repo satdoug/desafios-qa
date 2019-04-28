@@ -5,10 +5,7 @@ import enums.ReportMatrix;
 import enums.ValidationResult;
 import io.qameta.allure.Step;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static enums.FilterParameters.*;
@@ -171,6 +168,27 @@ public class ReportsAssertions {
         assertThat(paginacao.getAtual(), is(1));
         assertThat(paginacao.getLinhas(), is(25));
         assertThat(paginacao.getTotal(), is(1));
+    }
+
+    @Step
+    public void assertPersonDetails(ReportRequestDTO validReportData, UUID reportId, ResultDTO personResult) {
+        DocumentDetailsDTO personData = personResult.getResult().getDados();
+        assertThat(personData.getCpf(), is(validReportData.getParametros().getCpf_numero()));
+        assertThat(personData.getNome(), is(validReportData.getParametros().getCpf_nome().toUpperCase()));
+        List<UUID> personReportIds = personData.getRelatorios().stream()
+                .map(ReportItemDTO::getNumero)
+                .collect(Collectors.toList());
+        assertThat(personReportIds, hasItem(reportId));
+    }
+
+    @Step
+    public void assertCompanyDetails(ReportRequestDTO validReportData, UUID reportId, ResultDTO companyResult) {
+        DocumentDetailsDTO personData = companyResult.getResult().getDados();
+        assertThat(personData.getCnpj(), is(validReportData.getParametros().getCnpj_numero()));
+        List<UUID> personReportIds = personData.getRelatorios().stream()
+                .map(ReportItemDTO::getNumero)
+                .collect(Collectors.toList());
+        assertThat(personReportIds, hasItem(reportId));
     }
 
     @Step

@@ -1,9 +1,13 @@
 package dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import enums.ValidationResult;
 
 import java.util.UUID;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+@JsonInclude(NON_NULL)
 public class ReportItemDTO {
     private UUID numero;
     private String status;

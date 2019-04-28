@@ -2,6 +2,8 @@ package dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.List;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @JsonInclude(NON_NULL)
@@ -11,6 +13,7 @@ public class RequestParametersDTO {
     private String cpf_nome;
     private String cpf_numero;
     private String cnpj_numero;
+    private List<Object> parametros_auxiliares;
 
     public String getCpf_data_de_nascimento() {
         return cpf_data_de_nascimento;
@@ -42,5 +45,13 @@ public class RequestParametersDTO {
 
     public void setCnpj_numero(String cnpj_numero) {
         this.cnpj_numero = cnpj_numero;
+    }
+
+    public List<Object> getParametros_auxiliares() {
+        return parametros_auxiliares;
+    }
+
+    public void setParametros_auxiliares(List<Object> parametros_auxiliares) {
+        this.parametros_auxiliares = parametros_auxiliares;
     }
 }

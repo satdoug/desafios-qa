@@ -107,6 +107,14 @@ public class ConsultaPessoaDefaultTest {
         reportsAssertions.assertFilteredPeople(filterParameters, result);
     }
 
+    @Test
+    @Description("Get person details after request report for matrix consultaPessoaDefault")
+    @Severity(SeverityLevel.CRITICAL)
+    public void getPersonDetailsAfterConsultaPessoaDefault() {
+        ResultDTO personResult = reportsSteps.getReportDetails(PEOPLE_DETAILS, validReportData.getParametros().getCpf_numero());
+        reportsAssertions.assertPersonDetails(validReportData, result.getResult().getNumero(), personResult);
+    }
+
     private Map<String, Object> getReportFilterParameters() {
         Map<String, Object> filterParams = new HashMap<>();
         filterParams.put(numero_documento.name(), validReportData.getParametros().getCpf_numero());
