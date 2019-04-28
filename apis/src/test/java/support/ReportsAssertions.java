@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static enums.FilterParameters.*;
+import static enums.ReportMatrix.consultaPessoaDefault;
 import static enums.ValidationResult.MANUAL_APPROVAL;
 import static enums.ValidationResult.VALID;
 import static java.net.HttpURLConnection.HTTP_OK;
@@ -88,7 +89,7 @@ public class ReportsAssertions {
 
     @Step
     public void assertReportQueryConsultaPessoaDefault(ResultDTO result) {
-        assertThat(result.getResult().getNome_matriz(), is(ReportMatrix.consultaPessoaDefault));
+        assertThat(result.getResult().getNome_matriz(), is(consultaPessoaDefault));
         assertThat(result.getResult().getConsultas(), hasSize(greaterThan(0)));
         Set<String> queryNames = assertQueryDetails(result);
         assertThat(queryNames, hasItems("Processos SP", "CPF Receita Federal", "Antecedentes Federal", "Protestos"));
@@ -125,7 +126,7 @@ public class ReportsAssertions {
     @Step
     public void assertReportParametersConsultaPessoaDefault(ReportRequestDTO reportData, ResultDTO result) {
         assertThat(result.getResult().getResultado(), is(VALID));
-        assertThat(result.getResult().getNome(), is(ReportMatrix.consultaPessoaDefault));
+        assertThat(result.getResult().getNome(), is(consultaPessoaDefault));
         assertThat(result.getResult().getParametros(), allOf(
                 hasProperty("cpf", is(reportData.getParametros().getCpf_numero())),
                 hasProperty("nome", is(reportData.getParametros().getCpf_nome())),
@@ -197,4 +198,26 @@ public class ReportsAssertions {
         assertThat(result.getResultado(), is(MANUAL_APPROVAL));
         assertThat(result.getValidado_manualmente(), is(true));
     }
+
+    @Step
+    public void assertMatrixList(ResultDTO result) {
+        List<String> expectedMatrixes = Arrays.stream(ReportMatrix.values())
+                .map(ReportMatrix::toString)
+                .collect(Collectors.toList());
+        List<String> actualMatrixes = result.getResult().getItens().stream()
+                .map(item -> ((LinkedHashMap) item).get("nome").toString())
+                .collect(Collectors.toList());
+        assertThat(actualMatrixes, containsInAnyOrder(expectedMatrixes.toArray()));
+    }
+
+    public void assertMatrixDetailsConsultaPessoaDefault(MatrixResultDTO result) {
+        List<String> parameters = result.getResult().getParametros().stream()
+                .map(ResultParametersDTO::getNome)
+                .collect(Collectors.toList());
+
+        assertThat(result.getResult().getNome(), is(consultaPessoaDefault));
+        assertThat(parameters, hasItems("cpf_data_de_nascimento", "cpf_nome", "cpf_numero"));
+        assertThat(result.getResult().getTipo(), is("Pessoa"));
+    }
+
 }

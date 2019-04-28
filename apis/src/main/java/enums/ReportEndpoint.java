@@ -10,7 +10,9 @@ public enum ReportEndpoint {
     PEOPLE_ALL("/pessoas"),
     PEOPLE_DETAILS("/pessoas/{documentNumber}"),
     COMPANIES_ALL("/empresas"),
-    COMPANIES_DETAILS("/empresas/{documentNumber}");
+    COMPANIES_DETAILS("/empresas/{documentNumber}"),
+    MATRIX_ALL("/matrizes"),
+    MATRIX_DETAILS("/matrizes/{matrixName}");
 
     private final String reportEndpoint;
 

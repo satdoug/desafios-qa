@@ -40,6 +40,7 @@ public class ResultDetailsDTO {
     private String busca;
     private DocumentDetailsDTO dados;
 
+
     public UUID getNumero() {
         return numero;
     }

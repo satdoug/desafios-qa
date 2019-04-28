@@ -1,10 +1,8 @@
 package support;
 
-import dtos.ManualApprovalRequestDTO;
-import dtos.ReportRequestDTO;
-import dtos.ResultDTO;
-import dtos.ResultDetailsDTO;
+import dtos.*;
 import enums.ReportEndpoint;
+import enums.ReportMatrix;
 import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -18,6 +16,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static enums.ReportEndpoint.MATRIX_ALL;
+import static enums.ReportEndpoint.MATRIX_DETAILS;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -138,5 +138,27 @@ public class ReportsSteps {
         .then()
                 .statusCode(HTTP_OK)
                 .extract().as(ResultDTO.class);
+    }
+
+    @Step
+    public ResultDTO getMatrixList() {
+        return RequestParams.getInstance().getRequestParams().when()
+                .get(MATRIX_ALL.getReportEndpoint())
+                .prettyPeek()
+        .then()
+                .statusCode(HTTP_OK)
+                .extract().as(ResultDTO.class);
+    }
+
+    @Step
+    public MatrixResultDTO getMatrixDetails(ReportMatrix matrix) {
+        return RequestParams.getInstance().getRequestParams()
+                .pathParam("matrixName", matrix)
+        .when()
+                .get(MATRIX_DETAILS.getReportEndpoint())
+                .prettyPeek()
+        .then()
+                .statusCode(HTTP_OK)
+                .extract().as(MatrixResultDTO.class);
     }
 }
