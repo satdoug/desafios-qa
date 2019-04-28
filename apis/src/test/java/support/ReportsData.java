@@ -1,21 +1,22 @@
-package reports;
+package support;
 
 import dtos.*;
 import enums.ReportMatrix;
 import io.qameta.allure.Step;
+import utilities.ManualApprovalRandomizer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static utilities.ProjectProperties.*;
 
-public class ReportsTestData {
+public class ReportsData {
 
     private static class SingletonHolder {
-        public static final ReportsTestData instance = new ReportsTestData();
+        public static final ReportsData instance = new ReportsData();
     }
 
-    public static ReportsTestData getInstance() {
+    public static ReportsData getInstance() {
         return SingletonHolder.instance;
     }
 

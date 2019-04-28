@@ -1,4 +1,4 @@
-package reports;
+package support;
 
 import dtos.*;
 import io.qameta.allure.Step;
@@ -13,13 +13,13 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 
-public class ReportsTestStep {
+public class ReportsSteps {
 
     private static class SingletonHolder {
-        public static final ReportsTestStep instance = new ReportsTestStep();
+        public static final ReportsSteps instance = new ReportsSteps();
     }
 
-    public static ReportsTestStep getInstance() {
+    public static ReportsSteps getInstance() {
         return SingletonHolder.instance;
     }
 

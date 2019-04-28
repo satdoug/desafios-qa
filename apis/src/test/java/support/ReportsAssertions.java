@@ -1,4 +1,4 @@
-package reports;
+package support;
 
 import dtos.ResultBatchNumberDTO;
 import dtos.ResultReportValidationDTO;
@@ -16,13 +16,13 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class ReportTestAssertions {
+public class ReportsAssertions {
 
     private static class SingletonHolder {
-        public static final ReportTestAssertions instance = new ReportTestAssertions();
+        public static final ReportsAssertions instance = new ReportsAssertions();
     }
 
-    public static ReportTestAssertions getInstance() {
+    public static ReportsAssertions getInstance() {
         return SingletonHolder.instance;
     }
 

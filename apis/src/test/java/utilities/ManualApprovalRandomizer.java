@@ -1,4 +1,4 @@
-package reports;
+package utilities;
 
 import dtos.ManualApprovalRequestDTO;
 import io.github.benas.randombeans.randomizers.FakerBasedRandomizer;

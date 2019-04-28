@@ -44,7 +44,10 @@ $ mvn clean test -DtestGroup="functionality"
 ```
 Functionalities available:
 * all
-* reports
+* consultaPessoaDefault
+* consultaCPF
+* consultaEmpresaDefault
+* manualApproval
 ### Run tests cases with blocker severity
 ```text
 mvn clean test -DtestGroup="blocker"
@@ -65,9 +68,9 @@ The Allure report should be generated in folder `target/allure-results`, as defi
   * [Random Beans](https://github.com/benas/random-beans) (for randomized values)
   * [Awaitility](https://github.com/awaitility/awaitility) (for implementation of polling logic on asynchronous requests)
 * Test classes and methods were tagged, in order to allow the test execution through command line, by defining which `testGroup` will be executed. 
-* Test classes were separated per functionality, and structured in 4 classes:
-  * `<Functionality>Test.class`: Containing the test scenarios;
-  * `<Functionality>TestData.class`: Containing the steps needed to create test data;
-  * `<Functionality>TestSteps.class`: Containing the steps to execute requests, assert status codes and get response payloads;
-  * `<Functionality>TestAssertions.class`: Containing the steps to made assertions according to test scenario.
+* Test classes were separated per functionality, and placed in package `reports`.
+* Since test steps, data and assertions are shared between test classes, they are implemented in 3 classes inside package `support`:
+  * `ReportsData.class`: Containing the steps needed to create test data;
+  * `ReportsSteps.class`: Containing the steps to execute requests, assert status codes and get response payloads;
+  * `ReportsAssertions.class`: Containing the steps to made assertions according to test scenario.
 * Created specific DTO classes in `/src/main/dtos/`, to help on request/response payload serialization/deserialization, as well as to keep assertions more descriptive.
