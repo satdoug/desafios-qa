@@ -9,7 +9,12 @@ public enum ProjectProperties {
     VALID_BIRTHDAY("validBirthday"),
     VALID_COMPANY_NUMBER("validCompanyNumber"),
     BASE_URL("base.url"),
-    TOKEN("token");
+    TOKEN("token"),
+    INVALID_TOKEN("invalid.token"),
+    INVALID_REPORT_ID("invalid.report.id"),
+    INVALID_DOCUMENT_NUMBER("invalid.document.number"),
+    INVALID_COMPANY_NUMBER("invalid.company.number"),
+    INVALID_MATRIX("invalid.matrix");
 
     private final String value;
 

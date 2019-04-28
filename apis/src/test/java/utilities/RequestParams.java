@@ -22,4 +22,11 @@ public class RequestParams {
                 .header(AUTHORIZATION, getProperty(TOKEN))
                 .log().all();
     }
+
+    public RequestSpecification getRequestParamsInvalidAuth() {
+        return given()
+                .baseUri(getProperty(BASE_URL))
+                .header(AUTHORIZATION, getProperty(INVALID_TOKEN))
+                .log().all();
+    }
 }

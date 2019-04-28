@@ -30,6 +30,15 @@ public class ReportsData {
     }
 
     @Step
+    public ReportRequestDTO getInvalidReportData(ReportMatrix reportMatrix) {
+        RequestParametersDTO parameters = getInvalidParameters();
+        ReportRequestDTO report = new ReportRequestDTO();
+        report.setMatriz(reportMatrix);
+        report.setParametros(parameters);
+        return report;
+    }
+
+    @Step
     public ManualApprovalRequestDTO getManualApproval() {
         return ManualApprovalRandomizer.getInstance().getRandomValue();
     }
@@ -38,6 +47,10 @@ public class ReportsData {
         return reportMatrix.equals(ReportMatrix.consultaEmpresaDefault)
                 ? getValidCompanyParameters()
                 : getValidPersonParameters();
+    }
+
+    private RequestParametersDTO getInvalidParameters() {
+        return new RequestParametersDTO();
     }
 
     private RequestParametersDTO getValidPersonParameters() {

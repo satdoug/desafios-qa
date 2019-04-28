@@ -47,6 +47,7 @@ Functionalities available:
 * consultaPessoaDefault
 * consultaCPF
 * consultaEmpresaDefault
+* expectedErrors
 * manualApproval
 * matrixReports
 * userReport
@@ -70,7 +71,8 @@ The Allure report should be generated in folder `target/allure-results`, as defi
   * [Random Beans](https://github.com/benas/random-beans) (for randomized values)
   * [Awaitility](https://github.com/awaitility/awaitility) (for implementation of polling logic on asynchronous requests)
 * Test classes and methods were tagged, in order to allow the test execution through command line, by defining which `testGroup` will be executed. 
-* Test classes were separated per functionality, and placed in package `reports`.
+* Test classes were separated per functionality, and placed in package `reports`, to fulfill _Unknown scenarios_ part of the challenge. The data provided in these classes comes from parameters passed through Maven properties / Jenkins parametrized build, in order not to provide real data in test source code.
+* It was also included the test class `ExpectedErrorsTest.class` to fulfill _Known scenarios_ part of the challenge
 * Since test steps, data and assertions are shared between test classes, they are implemented in 3 classes inside package `support`:
   * `ReportsData.class`: Containing the steps needed to create test data;
   * `ReportsSteps.class`: Containing the steps to execute requests, assert status codes and get response payloads;

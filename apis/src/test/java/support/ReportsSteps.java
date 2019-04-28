@@ -16,9 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static enums.ReportEndpoint.MATRIX_ALL;
-import static enums.ReportEndpoint.MATRIX_DETAILS;
-import static enums.ReportEndpoint.USER_DETAILS;
+import static enums.ReportEndpoint.*;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -40,7 +38,7 @@ public class ReportsSteps {
                 .header(CONTENT_TYPE, "application/json")
                 .body(request)
             .when()
-                .post("/relatorios")
+                .post(REPORT_ALL.getReportEndpoint())
                 .prettyPeek()
             .then()
                 .statusCode(HTTP_OK)
@@ -123,7 +121,7 @@ public class ReportsSteps {
                 .header(CONTENT_TYPE, "application/json")
                 .body(request)
         .when()
-                .post("/relatorios/validar/{reportId}")
+                .post(MANUAL_APPROVAL.getReportEndpoint())
                 .prettyPeek()
         .then()
                 .statusCode(HTTP_OK)
