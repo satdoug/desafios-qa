@@ -2,6 +2,8 @@ package dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.List;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @JsonInclude(NON_NULL)
@@ -13,6 +15,7 @@ public class ResultParametersDTO {
     private String cnpj;
     private Boolean requerido;
     private String titulo;
+    private List<Object> parametros_auxiliares;
 
     public String getData_de_nascimento() {
         return data_de_nascimento;
@@ -60,5 +63,13 @@ public class ResultParametersDTO {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public List<Object> getParametros_auxiliares() {
+        return parametros_auxiliares;
+    }
+
+    public void setParametros_auxiliares(List<Object> parametros_auxiliares) {
+        this.parametros_auxiliares = parametros_auxiliares;
     }
 }
